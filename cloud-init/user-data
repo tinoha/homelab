@@ -1,0 +1,32 @@
+#cloud-config
+package_reboot_if_required: true
+package_update: true
+package_upgrade: true
+packages:
+  - qemu-guest-agent
+timezone: Europe/Helsinki
+keyboard:
+  layout: fi
+
+runcmd:
+  - systemctl enable  qemu-guest-agent
+  - systemctl start   qemu-guest-agent
+
+password: password
+chpasswd:
+  expire: False
+ssh_pwauth: True
+
+users:
+  - default
+  - name: tino
+    shell: /bin/bash
+    gecos: "Tino H"
+    homedir: /home/tino
+    groups: users
+    sudo: "ALL=(ALL) NOPASSWD:ALL"
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDHnVV7wH7ZG18C0eilv3L6bcb9kOXtwOmVmj/DCWKNgewhn9FLjrjuRrGoIBapAW+mOjb4JCrJToHsf5fi1cmAXkWjjnoUxBz59R6KhUu/RB42EIgXE8khXOi6tE4ojLRW4f6oMpps6Ahs91iLGyHxpzbxWUgNKjEUseoOgExYXSZGd4T1FboqCLsF3eSDACwKltKFEdCamqCgF6BqHC75NO8AQfBspDoIg4Wu2zdb3CLH3oPkemjRJ+i3y8JlfpSzzOCN7APhbLzt8b+C1aUhd+b2mQsqatkiFmRpXCYfNilN6D0M3r3BorCOVneLaBGbKZT422bQ8kZbk6lqQpLmN7OMUGsfX3iiX0v0+JlnSPDpU93x3oWYGSNQEwJ3XIPyX4tvGtChOYsgB2cjc08eG5m4VyOTq2/8lczoS0gQ3aI+aeK8/JDbq0efJaJUXbSnL5/iARQ1jarj0Z4OHxaFc6F0oCi6FbyQwuKBigSiLnURfIAqokmYEHNQlMzzZQE=
+    ssh_pwauth: True
+#    password: "password" #PW login not working..
+
