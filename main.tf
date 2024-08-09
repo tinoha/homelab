@@ -14,13 +14,15 @@ resource "libvirt_volume" "os_base" {
 }
 
 resource "libvirt_volume" "os" {
-  name           = "${var.vm_name}.qcow2"
+  count          = var.vm_count
+  name           = "${var.vm_name}-${count.index}.qcow2"
   base_volume_id = libvirt_volume.os_base.id
   pool           = var.volume_pool
 }
 
 resource "libvirt_domain" "vm" {
-  name   = var.vm_name
+  count  = var.vm_count
+  name   = "${var.vm_name}-${count.index}"
   vcpu   = var.vm_vcpu
   memory = var.vm_memory
   #machine = "pc-q35-8.2"  # if defined cloudinit_disk will fails as IDE not supported
@@ -32,14 +34,14 @@ resource "libvirt_domain" "vm" {
   }
 
   disk {
-    volume_id = libvirt_volume.os.id
+    volume_id = libvirt_volume.os[count.index].id
     scsi      = var.vm_disk_scsi
   }
 
   network_interface {
     bridge = var.network_bridge
   }
-  
+
   # Ensure changes to the WWN are ignored
   lifecycle {
     ignore_changes = [

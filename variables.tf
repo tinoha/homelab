@@ -23,6 +23,12 @@ variable "vm_name" {
   default     = "tfvm"
 }
 
+variable "vm_count" {
+  description = "The number of vm's created "
+  type        = string
+  default     = "1"
+}
+
 variable "vm_vcpu" {
   description = "The number of vCPUs for the vm."
   type        = string
@@ -68,7 +74,7 @@ variable "cloudinit_pool" {
 variable "cloud_init_data_file" {
   description = "Path to the user-data file. If not set default is ./cloud-init/user-data"
   type        = string
-  default     = null  # Default to null, meaning no override
+  default     = null # Default to null, meaning no override
 }
 
 
