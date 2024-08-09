@@ -39,6 +39,13 @@ resource "libvirt_domain" "vm" {
   network_interface {
     bridge = var.network_bridge
   }
+  
+  # Ensure changes to the WWN are ignored
+  lifecycle {
+    ignore_changes = [
+      disk[0].wwn
+    ]
+  }
 }
 
 resource "libvirt_cloudinit_disk" "common" {
