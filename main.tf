@@ -1,6 +1,6 @@
 provider "libvirt" {
   # Configuration options
-  uri = "qemu:///system"
+  uri = var.libvirt_uri
 }
 
 locals {
