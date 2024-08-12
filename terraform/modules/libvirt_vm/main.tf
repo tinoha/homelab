@@ -26,7 +26,7 @@ resource "libvirt_domain" "vm" {
   vcpu   = var.vm_vcpu
   memory = var.vm_memory
   #machine = "pc-q35-8.2"  # if defined cloudinit_disk will fails as IDE not supported
-  #qemu_agent = "true"
+  qemu_agent = var.vm_qemu_agent
   cloudinit = libvirt_cloudinit_disk.common.id
 
   cpu {
@@ -40,6 +40,7 @@ resource "libvirt_domain" "vm" {
 
   network_interface {
     bridge = var.network_bridge
+    wait_for_lease = var.network_wait_for_lease
   }
 
   # Ensure changes to the WWN are ignored

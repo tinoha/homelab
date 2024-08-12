@@ -47,6 +47,18 @@ variable "vm_cpu_mode" {
   default     = "host-passthrough"
 }
 
+variable "vm_qemu_agent" {
+  description = "Use QEMU agent: true|false "
+  type        = string
+  default     = "false"
+}
+
+variable "network_wait_for_lease" {
+  description = "Wait address is assigned to the interface: true|false "
+  type        = string
+  default     = "false"
+}
+
 variable "vm_disk_scsi" {
   description = "Whether the disk should use SCSI."
   type        = string
