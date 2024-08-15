@@ -6,21 +6,6 @@ variable "data_file" {
   default     = "./templates/user-data.tftpl"
 }
 
-# variable "meta_file" {
-#   description = "Path to a cloud-init meta-data template file"
-#   type        = string
-#   default     = "./templates/meta_data.tftpl"
-# }
-
-# variable "network_file" {
-#   description = "Path to a cloud-init meta-data template file"
-#   type        = string
-#   default     = "./templates/network_data.tftpl"
-# }
-
-# Cloud-init variables available in the default user-data template (./templates/user-data.tfpl).
-# Alternatively, set path to your own template (data_file) or edit the default template. 
-
 # Variables for new Administrative user creation. cloud-init default user will also be created.
 variable "username" {
   description = "User name in cloud-init"
@@ -66,7 +51,7 @@ variable "password" {
 
 variable "ssh_pwauth" {
   description = "Default user ssh login allowed with password."
-  type        = bool
+  type        = string
   default     = "false"
 }
 
