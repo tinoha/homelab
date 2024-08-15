@@ -54,14 +54,20 @@ resource "libvirt_domain" "vm" {
 resource "libvirt_cloudinit_disk" "common" {
   name      = var.cloudinit_name
   pool      = var.cloudinit_pool
-  user_data = data.template_file.cloud_init_user_data.rendered
+  user_data = module.cloud-init.user_data_txt
+  # user_data = module.cloud-init.user_data_mime
+  # user_data = data.template_file.cloud_init_user_data
 }
 
-data "template_file" "cloud_init_user_data" {
-  template = file(local.cloud_init_data_file)
+module "cloud-init" {
+  source = "../cloud-init"
 }
 
-locals {
-  cloud_init_data_file = var.cloud_init_data_file == null ? "${path.module}/cloud-init/user-data" : var.cloud_init_data_file
-}
+# data "template_file" "cloud_init_user_data" {
+#    template = file("${path.module}/cloud-init/user-data")
+#  }
+
+# locals {
+#   cloud_init_data_file = var.cloud_init_data_file == null ? "${path.module}/cloud-init/user-data" : var.cloud_init_data_file
+# }
 
