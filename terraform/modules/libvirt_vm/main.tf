@@ -54,11 +54,21 @@ resource "libvirt_domain" "vm" {
 resource "libvirt_cloudinit_disk" "common" {
   name      = var.cloudinit_name
   pool      = var.cloudinit_pool
-  # user_data = module.cloud-init.user_data_txt
+  #user_data = module.cloud-init.user_data_txt
   user_data = module.cloud-init.user_data_mime
 }
 
 module "cloud-init" {
   source = "../cloud-init"
+
+  username        = var.username
+  data_file       = var.data_file
+  gecos           = var.gecos
+  groups          = var.groups
+  shell           = var.shell
+  ssh_key         = var.ssh_key
+  sudo_privileges = var.sudo_privileges
+  ssh_pwauth      = var.ssh_pwauth
+  password        = var.password
 }
 
