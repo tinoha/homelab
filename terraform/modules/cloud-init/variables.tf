@@ -3,7 +3,7 @@
 variable "data_file" {
   description = "Path to a cloud-init user-data file with static values (no templating). When set all  When not set the default template and will be used."
   type        = string
-  default     = "/tmp/cloud-init-test.yaml"
+  default     = ""
 }
 
 ### user-data users: section variables ###
