@@ -83,12 +83,6 @@ variable "cloudinit_pool" {
   default     = "default"
 }
 
-variable "cloud_init_data_file" {
-  description = "Path to the user-data file. If not set default is ./cloud-init/user-data"
-  type        = string
-  default     = null # Default to null, meaning no override
-}
-
 ###### Cloud-init module variables
 
 variable "data_file" {
