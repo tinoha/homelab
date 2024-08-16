@@ -62,11 +62,3 @@ module "cloud-init" {
   source = "../cloud-init"
 }
 
-# data "template_file" "cloud_init_user_data" {
-#    template = file("${path.module}/cloud-init/user-data")
-#  }
-
-# locals {
-#   cloud_init_data_file = var.cloud_init_data_file == null ? "${path.module}/cloud-init/user-data" : var.cloud_init_data_file
-# }
-

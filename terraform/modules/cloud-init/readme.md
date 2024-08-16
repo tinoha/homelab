@@ -1,6 +1,7 @@
 # Cloud-Init Module
 
 This module sets up cloud-init configuration for provisioning a new user and system setup.
+Check also default template file which contains additional settings.
 
 ## Inputs
 
@@ -14,7 +15,7 @@ This module sets up cloud-init configuration for provisioning a new user and sys
 | `ssh_key`         | SSH public key                        | string | ``                            |
 | `sudo_privileges` | Sudo privileges configuration         | string | `ALL=(ALL) NOPASSWD:ALL`      |
 | `password`        | Default user's password               | string | ``                            |
-| `ssh_pwauth`      | Allow SSH login with password         | string | `false`                       |
+| `ssh_pwauth`      | Allow SSH login with password         | string | ``                            |
 | `hostname`        | Hostname for cloud-init               | string | ``                            |
 | `fqdn`            | Fully qualified domain name           | string | ``                            |
 

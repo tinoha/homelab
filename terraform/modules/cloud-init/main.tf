@@ -1,7 +1,3 @@
-#locals {
-  # user_data_file = var.data_file # == null ? "${path.module}/templates/default_user_data.tpl" : var.data_file
-#}
-
 data "cloudinit_config" "user_data" {
   gzip          = false
   base64_encode = false
@@ -14,8 +10,17 @@ data "cloudinit_config" "user_data" {
 }
 
 locals {
-  user_data = templatefile("${path.module}/templates/user-data.tftpl",local.vars) 
-    
+
+  # Set default user-data file path
+  data_file_default = "${path.module}/templates/user-data.tftpl"
+
+  # Is data_file variable set and is the file found
+  is_var_data_file = var.data_file != "" ? true : false
+  is_data_file_found = var.data_file != "" ? fileexists(var.data_file) : false
+
+  # Set path to user-data file
+  user_data = local.is_var_data_file == true && local.is_data_file_found == true ? file(var.data_file) : templatefile(local.data_file_default,local.vars)
+  
   vars = {
     # cloud-config user settings
     name_section = var.username != "" ? "- name: ${var.username}" : "" 
@@ -33,7 +38,9 @@ locals {
    }
 }
 
+/*
 resource "local_file" "user_data_file" {
   content  = local.user_data
-  filename = "${path.module}/output/user-data.yml"
+  filename = "${path.module}/user-data-output.yml"
 }
+*/

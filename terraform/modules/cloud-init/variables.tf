@@ -1,12 +1,12 @@
-# Variables for default cloud-init templates
+# Variables for default cloud-init templates. Check also the default user-data.tftpl content as it as other static settings not listed here.
 
 variable "data_file" {
-  description = "Path to a cloud-init user-data template file."
+  description = "Path to a cloud-init user-data file with static values (no templating). When set all  When not set the default template and will be used."
   type        = string
-  default     = "./templates/user-data.tftpl"
+  default     = "/tmp/cloud-init-test.yaml"
 }
 
-# Variables for new Administrative user creation. cloud-init default user will also be created.
+### user-data users: section variables ###
 variable "username" {
   description = "User name in cloud-init"
   type        = string
@@ -43,19 +43,7 @@ variable "sudo_privileges" {
   default     = "ALL=(ALL) NOPASSWD:ALL"
 }
 
-variable "password" {
-  description = "Default user's password in cloud-init"
-  type        = string
-  default     = ""
-}
-
-variable "ssh_pwauth" {
-  description = "Default user ssh login allowed with password."
-  type        = string
-  default     = "false"
-}
-
-# 
+#### user-data top level variables ### 
 variable "hostname" {
   description = "hostname in cloud-init"
   type        = string
@@ -64,6 +52,18 @@ variable "hostname" {
 
 variable "fqdn" {
   description = "fqdn in cloud-init"
+  type        = string
+  default     = ""
+}
+
+variable "ssh_pwauth" {
+  description = "Default user ssh login allowed with password."
+  type        = string
+  default     = ""
+}
+
+variable "password" {
+  description = "Default user's password in cloud-init"
   type        = string
   default     = ""
 }
