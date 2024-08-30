@@ -35,3 +35,8 @@ variable "subnets" {
     address_prefix = string
   }))
 }
+
+variable "create_loadbalancer" {
+  description = "Create the shared load balancer or not "
+  type        = bool
+}

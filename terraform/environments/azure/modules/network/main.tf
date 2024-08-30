@@ -46,6 +46,7 @@ tags = {
 
 # Deploy standard static public IP for the shared load balancer.
 resource "azurerm_public_ip" "shared_lb" {
+  count =              var.create_loadbalancer ? 1 : 0
   name                = "${var.env}-shared-lb-pip"
   location            = azurerm_resource_group.network.location
   resource_group_name = azurerm_resource_group.network.name
@@ -58,6 +59,7 @@ resource "azurerm_public_ip" "shared_lb" {
 }
 
 resource "azurerm_lb" "shared_lb" {
+  count =              var.create_loadbalancer ? 1 : 0
   name                = "${var.env}-shared-lb"
   location            = azurerm_virtual_network.vnet.location
   resource_group_name = azurerm_resource_group.network.name
@@ -66,7 +68,7 @@ resource "azurerm_lb" "shared_lb" {
 
   frontend_ip_configuration {
     name                 = "shared-fic"
-    public_ip_address_id = azurerm_public_ip.shared_lb.id
+    public_ip_address_id = azurerm_public_ip.shared_lb[count.index].id
   }
 
   tags = {
@@ -76,17 +78,19 @@ resource "azurerm_lb" "shared_lb" {
 
 # Shared loadbalancer backend address pool
 resource "azurerm_lb_backend_address_pool" "shared_lb" {
-  loadbalancer_id = azurerm_lb.shared_lb.id
+  count =              var.create_loadbalancer ? 1 : 0
+  loadbalancer_id = azurerm_lb.shared_lb[count.index].id
   name            = "${var.env}-shared-outbound-bap"
 
 }
 
 # Loadbalancer outbound rules for outbound internet traffic
 resource "azurerm_lb_outbound_rule" "shared_lb" {
+  count =              var.create_loadbalancer ? 1 : 0
   name                    = "${var.env}-shared-utbound-rule"
-  loadbalancer_id         = azurerm_lb.shared_lb.id
+  loadbalancer_id         = azurerm_lb.shared_lb[count.index].id
   protocol                = "All"
-  backend_address_pool_id = azurerm_lb_backend_address_pool.shared_lb.id
+  backend_address_pool_id = azurerm_lb_backend_address_pool.shared_lb[count.index].id
 
   frontend_ip_configuration {
     name = "shared-fic"

@@ -102,3 +102,9 @@ variable "default_subnets" {
   }]
 }
 
+
+variable "create_loadbalancer" {
+  description = "Create the shared load balancer or not "
+  type        = bool
+  default     = true
+}

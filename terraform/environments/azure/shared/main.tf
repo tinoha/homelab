@@ -38,11 +38,12 @@ locals {
 module "network" {
   source = "../modules/network"
 
-  env                = local.current_env
-  location           = local.environment.location
-  rg_name            = local.environment.rg_name
-  vnet_address_space = local.environment.vnet_address_space
-  vnet_name          = local.environment.vnet_name
-  subnets            = local.environment.subnets
+  env                 = local.current_env
+  location            = local.environment.location
+  rg_name             = local.environment.rg_name
+  vnet_address_space  = local.environment.vnet_address_space
+  vnet_name           = local.environment.vnet_name
+  subnets             = local.environment.subnets
+  create_loadbalancer = var.create_loadbalancer
 }
 

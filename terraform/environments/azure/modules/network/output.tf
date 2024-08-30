@@ -52,21 +52,22 @@ output "nsg_ids" {
 
 output "lb_id" {
   description = "The ID of the Load Balancer"
-  value       = azurerm_lb.shared_lb.id
+  value       = var.create_loadbalancer ? azurerm_lb.shared_lb[0].id : null
+  
 }
 
 output "frontend_ip_configuration" {
   description = "Frontend IP Configuration"
-  value       = azurerm_lb.shared_lb.frontend_ip_configuration
+  value       = var.create_loadbalancer ? azurerm_lb.shared_lb[0].frontend_ip_configuration : null
 }
 
 output "backend_address_pool_id" {
   description = "The ID of the Backend Address Pool"
-  value       = azurerm_lb_backend_address_pool.shared_lb.id
+  value       = var.create_loadbalancer ? azurerm_lb_backend_address_pool.shared_lb[0].id : null
 }
 
 output "lb_name" {
   description = "The name of the Load Balancer"
-  value       = azurerm_lb.shared_lb.name
+  value       = var.create_loadbalancer ? azurerm_lb.shared_lb[0].name : null
 }
 
