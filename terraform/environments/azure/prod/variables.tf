@@ -64,5 +64,5 @@ variable "ssh_public_key_path" {
 variable "subnet_id" {
   description = "Id of the subnet"
   type        = string
-  default = ""
+  default     = ""
 }

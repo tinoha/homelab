@@ -22,6 +22,7 @@ variable "rg_name" {
 variable "private_ip" {
   description = "Static Private IP for the VM, otherwise IP will be Dynamic"
   type = string
+  default = ""
 }
 
 variable "vm_name" {

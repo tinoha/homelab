@@ -19,7 +19,7 @@ module "kube_controlplane_01" {
 
 }
 
-# Shudown the VM every night
+# Shudown the VM automatically every night
 resource "null_resource" "vm_auto_shutdown" {
   provisioner "local-exec" {
     command = "az vm auto-shutdown --resource-group k8s-cluster-rg --name prod-controlplane-01 --time 23:00"
