@@ -4,7 +4,7 @@ locals {
   env = terraform.workspace != "default" ? terraform.workspace : var.env
 }
 
-module "kube_controlplane_01" {
+module "k8s_controlplane_01" {
   source     = "../modules/linux_vm"
   env        = local.env
   location   = var.location
@@ -21,9 +21,18 @@ module "kube_controlplane_01" {
 
 # Shudown the VM automatically every night
 resource "null_resource" "vm_auto_shutdown" {
+  depends_on = [ module.k8s_controlplane_01 ]
   provisioner "local-exec" {
     command = "az vm auto-shutdown --resource-group k8s-cluster-rg --name prod-controlplane-01 --time 23:00"
   }
+}
+
+
+
+# Write vm_ip to a text file
+resource "local_file" "vm_ip" {
+  filename = "${path.module}/output_files/control-plane-ip.txt"
+  content  = module.k8s_controlplane_01.vm_ip
 }
 
 
