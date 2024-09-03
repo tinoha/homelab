@@ -1,0 +1,6 @@
+---
+- name: Include user management tasks
+  ansible.builtin.include_tasks: users.yaml
+
+- name: Include system update tasks
+  ansible.builtin.include_tasks: system_update.yaml

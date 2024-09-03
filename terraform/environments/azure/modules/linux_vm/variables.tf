@@ -21,21 +21,27 @@ variable "rg_name" {
 
 variable "private_ip" {
   description = "Static Private IP for the VM, otherwise IP will be Dynamic"
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
 
 variable "vm_name" {
   description = "Virtual machine name"
-  type = string
+  type        = string
 }
 
 
 variable "vm_sku" {
   description = "The SKU for the VM"
-  type = string
+  type        = string
   # default     = "Standard_B1ms" # small VM type for testing
 }
+
+variable "enable_spot" {
+  description = "Enable spot instances with eviction policy Deallocate"
+  type = bool
+  default = false
+} 
 
 variable "admin_user" {
   description = "Admin user for the VM"
@@ -43,26 +49,40 @@ variable "admin_user" {
   # default     = "azureuser"
 }
 
-/*
+
 variable "admin_password" {
   description = "Admin password for the VM"
   type        = string
+  sensitive   = true
   # default     = ""
 }
-*/
+
 
 variable "ssh_public_key_path" {
   description = "Path to SSH public key"
+  sensitive   = true
   # default     = "~/.ssh/id_rsa.pub"
 }
 
-/* variable "bap_ids" {
-  description = "Backend address pool Ids"
-  type = list(string)
+variable "bap_id" {
+  description = "Loadbalancer Backend address pool Id"
+  type        = string
+  default     = ""
 }
-*/
 
 variable "subnet_id" {
   description = "Id of the subnet"
-  type = string
+  type        = string
+}
+
+variable "enable_auto_shutdown" {
+  description = "Wether to enable VM auto shutdown every day at 23:00 (time is currently hardcoded)"
+  type        = bool
+  default     = false
+}
+
+variable "allow_ssh_internet_inbound" {
+  description = "Allow SSH access from internet"
+  type        = bool
+  default     = false
 }

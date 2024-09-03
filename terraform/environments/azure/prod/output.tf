@@ -1,11 +1,4 @@
-output "vm_ip" {
-  value = module.k8s_controlplane_01.vm_ip
-}
-
-output "vm_name" {
-  value = module.k8s_controlplane_01.vm_name
-}
-
-output "vm_id" {
-  value = module.k8s_controlplane_01.vm_id
+# Output info about all created VM's in an array (JSON) containing VM name,ip and resource id
+output "vm_info" {
+  value = local.vm_info
 }

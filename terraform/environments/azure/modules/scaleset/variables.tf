@@ -33,7 +33,7 @@ variable "computer_name_prefix" {
 variable "vm_count" {
   description = "Count of the VM's"
   type = number
- # default     = "1" # small VM type for testing
+  default     = 1
 }
 
 variable "vm_sku" {
@@ -45,23 +45,25 @@ variable "vm_sku" {
 variable "admin_user" {
   description = "Admin user for the VM"
   type        = string
-  # default     = "azureuser"
-}
+ }
 
-variable "admin_password" {
+ variable "admin_password" {
   description = "Admin password for the VM"
   type        = string
-  # default     = ""
+  sensitive = true
+  default = null
 }
 
 variable "ssh_public_key_path" {
-  description = "Path to SSH public key"
-  # default     = "~/.ssh/id_rsa.pub"
+  description = "SSH public key path"
+  type = string
+  sensitive = true
 }
 
-variable "bap_ids" {
-  description = "Backend address pool Ids"
-  type = list(string)
+variable "bap_id" {
+  description = "Load balancer Backend address pool Id"
+  type = string
+  default = ""
 }
 
 variable "subnet_id" {

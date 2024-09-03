@@ -37,10 +37,3 @@ locals {
     fqdn_section = var.fqdn != "" ? "fqdn: ${var.fqdn}" : ""
    }
 }
-
-/*
-resource "local_file" "user_data_file" {
-  content  = local.user_data
-  filename = "${path.module}/user-data-output.yml"
-}
-*/

@@ -1,0 +1,11 @@
+---
+- name: Check if worker is already joined ( /etc/kubernetes/kubelet.conf exists?)
+  ansible.builtin.stat:
+    path: /etc/kubernetes/kubelet.conf
+  register: worker_joined
+
+- name: Join worker nodes to cluster using kubeadm join
+  ansible.builtin.shell:
+    cmd: "{{ kubeadm_join_command }}"
+  register: kubeadm_join_output
+  when: not worker_joined.stat.exists

@@ -65,6 +65,12 @@ variable "vm_disk_scsi" {
   default     = true
 }
 
+variable "os_volume_size" {
+  description = "OS volume size"
+  type        = string
+  default     = 10737418240 # 10GB
+}
+
 variable "network_bridge" {
   description = "The network bridge for the vm."
   type        = string
@@ -72,9 +78,9 @@ variable "network_bridge" {
 }
 
 variable "cloudinit_name" {
-  description = "The name of the cloudinit volume."
+  description = "The base name of the cloudinit volume. Do not add suffix to the name (.iso)"
   type        = string
-  default     = "cloudinit-common.iso"
+  default     = "cloudinit"
 }
 
 variable "cloudinit_pool" {
@@ -113,7 +119,7 @@ variable "shell" {
 
 variable "ssh_key" {
   type = string
-  description = "SSH public key for the user in cloud-init"
+  description = "SSH public key file for the user in cloud-init"
 }
 
 variable "sudo_privileges" {

@@ -1,0 +1,9 @@
+---
+controlplane:
+  hosts: # Replace with real IP addressess
+    192.168.1.224:
+
+worker:
+  hosts: # Replace with real IP addressess
+    192.168.1.222:
+  # 192.168.1.227:    # Multiple worker nodes can be added lik this

@@ -1,0 +1,13 @@
+#!/bin/bash 
+
+if [ "$#" -gt 0 ]; then
+  ARGS="az $@"
+else
+  ARGS=""
+fi
+
+# Place this simple script in /usr/local/bin if you prefer to use azure cli in a container instead of installing it locally.
+# This way Terraform can utilize az client for managing Azure resources.
+# Do not include --name argument as it would prevent starting multiple instances at one time, which Terraform seems to do sometimes.
+
+podman run -it --rm --tty -h az -v ${HOME}/.azure:/root/.azure -v ${HOME}/.ssh:/root/.ssh -v ${PWD}:/workdir -w /workdir mcr.microsoft.com/azure-cli:cbl-mariner2.0 ${ARGS}

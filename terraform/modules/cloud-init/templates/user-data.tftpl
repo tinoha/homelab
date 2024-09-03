@@ -1,7 +1,7 @@
-#cloud-config
+# cloud-config top-level settings
 package_update: true
-#package_upgrade: true
-#package_reboot_if_required: true
+package_upgrade: true
+package_reboot_if_required: true
 
 packages:
   - qemu-guest-agent
@@ -20,6 +20,10 @@ chpasswd:
 ${password_section}
 ${ssh_pwauth_section}
 
+${hostname_section}
+${fqdn_section}
+
+# cloud-config user settings
 users:
 - default
 ${name_section}

@@ -1,10 +1,14 @@
+variable "az_subscription_id" {
+  description = "Azure subscription id"
+  type        = string
+}
+
 # Define environment to which resources are deployed.
 # If unset terraform-workspace name is used. 
-
 variable "env" {
   description = "Environment name"
   type        = string
-  default     = "default"
+  default     = "prod"
 }
 
 # Define the Azure region variable where resources are deployed
@@ -18,7 +22,8 @@ variable "location" {
 
 variable "vm_count" {
   description = "Count of the VM's"
-  default     = "1" # small VM type for testing
+  type        = number
+  default     = 1
 }
 
 variable "vm_sku" {
@@ -29,17 +34,19 @@ variable "vm_sku" {
 variable "admin_user" {
   description = "Admin user for the VM"
   type        = string
-  default     = "azureuser"
+  default     = "sysadmin"
 }
 
 variable "admin_password" {
   description = "Admin password for the VM"
   type        = string
-  default     = "T0s1sala-"
+  default     = null
+  sensitive   = true
 }
 
 variable "ssh_public_key_path" {
-  description = "Path to SSH public key"
-  default     = "~/.ssh/id_rsa.pub"
+  description = "SSH public key path"
+  type        = string
+  default     = "~/.ssh/id_ed25519_sysadmin.pub"
 }
 

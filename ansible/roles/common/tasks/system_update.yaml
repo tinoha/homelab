@@ -1,0 +1,16 @@
+---
+- name: Update cache if the last one is more than 3600 seconds ago
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Upgrade all OS packages to the latest versions
+  ansible.builtin.apt:
+    update_cache: false
+    upgrade: full
+  register: apt_os_update
+
+- name: Clean up OS (autoremove & clean)
+  ansible.builtin.apt:
+    autoremove: true
+    clean: true

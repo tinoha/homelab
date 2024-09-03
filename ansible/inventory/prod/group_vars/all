@@ -1,0 +1,31 @@
+# Dedicated user for Ansible to connect to the remote hosts.
+# Corresponding ssh public key must be in ~/.ssh/authorized_keys of remote hosts
+ansible_user: "sysadmin"
+ansible_ssh_private_key_file: "{{ lookup('env','HOME')}}/.ssh/id_ed25519_sysadmin"
+
+# Create a user for managing Kubernetes (optional). Will also have passwordless sudo enabled.
+# Set k8s_user: "" if you prefer not to have the user.
+# Replace the default key file path with your own public key if you want to login with own account
+k8s_user: "kubeadmin"
+k8s_user_ssh_key_file: "{{ lookup('env','HOME')}}/.ssh/id_ed25519_sysadmin.pub" # public ssh key to authorized_keys
+
+# Set Kubernetes version, and optionally define the apt package resivison.
+# Kubernetes home is https://kubernetes.io
+k8s_version: "1.31.1"
+k8s_pkg_version: "{{ k8s_version }}-*"
+
+# Set path to official Containerd binary pkg and checksum (sha256) files.
+# Containerd home is https://github.com/containerd/containerd
+containerd: "https://github.com/containerd/containerd/releases/download/v1.7.22/containerd-1.7.22-linux-amd64.tar.gz"
+containerd_cksum: "https://github.com/containerd/containerd/releases/download/v1.7.22/containerd-1.7.22-linux-amd64.tar.gz.sha256sum"
+
+# Set path to official Runc binary pkg and checksum (sha256) files.
+# Runc home is https://github.com/opencontainers/runc
+runc: "https://github.com/opencontainers/runc/releases/download/v1.1.14/runc.amd64"
+runc_cksum: "https://github.com/opencontainers/runc/releases/download/v1.1.14/runc.sha256sum"
+
+# Deploy Kubernetes pod network plug-in Flannel, or not
+deploy_flannel: true # ( true|false)
+
+# Default directory for file downloads etc on remote hosts.
+work_dir: "/tmp/ansible-k8s-temp"

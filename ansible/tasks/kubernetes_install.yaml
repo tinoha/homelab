@@ -1,0 +1,72 @@
+---
+# install packages needed to use the Kubernetes apt repository:
+- name: Install packages needed to use the Kubernetes apt repository
+  ansible.builtin.apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gpg
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Create /etc/apt/keyrings directory if it does not exist
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+
+- name: Extract the first two digits version string from the Kubernetes version (x.y.z)
+  ansible.builtin.set_fact:
+    k8s_major_minor_version: "{{ k8s_version.split('.')[:2] | join('.') }}"
+
+# The same signing key is used for all repositories so you can disregard the version in the URL
+- name: Download and import Kubernetes signing key
+  ansible.builtin.get_url:
+    url: https://pkgs.k8s.io/core:/stable:/v{{ k8s_major_minor_version }}/deb/Release.key
+    dest: /tmp/kubernetes-release.key # Download to a temporary location
+    mode: "u=rw,a+r"
+
+- name: Import the key into the keyring
+  ansible.builtin.shell:
+    cmd: "gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg /tmp/kubernetes-release.key"
+    creates: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+# Add the appropriate Kubernetes apt repository. Please note that that a repository have packages only for certain kubernetes version.
+# for other Kubernetes minor versions, you need to change the Kubernetes minor version in the URL
+- name: Add the appropriate Kubernetes apt repository
+  ansible.builtin.apt_repository:
+    filename: /etc/apt/sources.list.d/kubernetes.list
+    repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v{{ k8s_major_minor_version }}/deb/ /"
+    state: present
+    update_cache: true
+
+- name: "Install Kubernetes packages (kubelet kubeadm kubectl)"
+  ansible.builtin.apt:
+    pkg:
+      - "kubelet={{ k8s_pkg_version }}"
+      - "kubeadm={{ k8s_pkg_version }}"
+      - "kubectl={{ k8s_pkg_version }}"
+    allow_downgrade: true
+    allow_change_held_packages: true
+    update_cache: true
+    cache_valid_time: 3600
+  when: not ansible_check_mode
+
+- name: Check if Kubernetes packages are installed
+  ansible.builtin.package_facts:
+    manager: apt
+
+- name: Hold the Kubernetes packages to prevent accidental upgrades
+  ansible.builtin.dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  loop:
+    - kubelet
+    - kubectl
+    - kubeadm
+  when:
+    - not ansible_check_mode
+    - ansible_facts.packages[item] is defined # Only run if the package is installed
+  ignore_errors: false # Error if packages are not yet installed

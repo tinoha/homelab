@@ -1,10 +1,13 @@
-# Define environment to which resources are deployed.
-# If unset terraform-workspace name is used. 
+variable "az_subscription_id" {
+  description = "Azure subscription id"
+  type        = string
+}
 
+# Define environment name to which resources are deployed.
 variable "env" {
   description = "Environment name"
   type        = string
-  default     = "default"
+  default     = "prod"
 }
 
 # Define the Azure region variable where resources are deployed
@@ -15,7 +18,7 @@ variable "location" {
 }
 
 variable "rg_name" {
-  description = "Resource group name."
+  description = "Resource group name suffix."
   type        = string
   default     = "shared-network-rg"
 }
@@ -23,7 +26,7 @@ variable "rg_name" {
 
 # Define Dev environment IP ranges
 variable "dev_vnet_name" {
-  description = "Name for the Dev virtual network."
+  description = "Name suffix for the Dev virtual network."
   type        = string
   default     = ""
 }
@@ -48,15 +51,15 @@ variable "dev_subnets" {
 
 # Define Prod environment network IP ranges
 variable "prod_vnet_name" {
-  description = "Name for the prod virtual network."
+  description = "Name suffix for the prod virtual network."
   type        = string
-  default     = ""
+  default     = "shared-vnet"
 }
 
 variable "prod_vnet_address_space" {
   description = "Address space for the prod virtual network."
   type        = string
-  default     = ""
+  default     = "10.80.0.0/16"
 }
 
 variable "prod_subnets" {
@@ -65,18 +68,28 @@ variable "prod_subnets" {
     name           = string
     address_prefix = string
   }))
-  default = [{
-    address_prefix = ""
-    name           = ""
-  }]
+  default = [
+    {
+      address_prefix = "10.80.0.0/24"
+      name           = "mgmt-subnet"
+    },
+    {
+      address_prefix = "10.80.1.0/24"
+      name           = "app-subnet"
+    },
+    {
+      address_prefix = "10.80.2.0/24"
+      name           = "k8s-subnet"
+    },
+  ]
 }
 
 # Default environment IP ranges
 
 variable "default_vnet_name" {
-  description = "Name for the default virtual network."
+  description = "Name suffix for the default virtual network."
   type        = string
-  default     = "default-vnet"
+  default     = "shared-vnet"
 }
 
 variable "default_vnet_address_space" {
@@ -107,4 +120,10 @@ variable "create_loadbalancer" {
   description = "Create the shared load balancer or not "
   type        = bool
   default     = true
+}
+
+variable "allow_ssh_internet_inbound" {
+  description = "Allow ssh from internet to all subnets"
+  type        = bool
+  default     = false
 }

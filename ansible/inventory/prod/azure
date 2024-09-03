@@ -1,0 +1,12 @@
+---
+controlplane:
+  hosts:
+    controlplane1:
+      ansible_host: 40.121.157.38 # Replace with actual IP
+      ansible_port: 42203 # Replace with actual ssh port, or comment out if 22
+
+worker:
+  hosts:
+    worker1:
+      ansible_host: 40.121.157.38 # Replace this with actual IP
+      ansible_port: 42202 # Replace with actual ssh port, or comment out if 22

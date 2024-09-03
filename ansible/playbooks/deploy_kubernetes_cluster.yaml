@@ -1,0 +1,45 @@
+---
+- name: Prepare nodes and install Kubernetes
+  hosts: "controlplane, worker"
+  become: true
+  gather_facts: true # Gather facts about the target hosts
+
+  roles:
+    - role: common
+      vars:
+        user: "{{ k8s_user }}"
+        user_ssh_key_file: "{{ k8s_user_ssh_key_file }}"
+
+  tasks:
+    - name: Preparate nodes for Kubernetes
+      ansible.builtin.include_tasks: ../tasks/kubernetes_node_prep.yaml
+    - name: Install Kubernetes and related software packages
+      ansible.builtin.include_tasks: ../tasks/kubernetes_install.yaml
+
+- name: Initialize Kubernetes cluster controlplane
+  hosts: "controlplane"
+  become: true
+
+  tasks:
+    - name: Include ../tasks/kubernetes_control_plane.yaml
+      ansible.builtin.include_tasks: ../tasks/kubernetes_control_plane.yaml
+      vars:
+        user: "{{ k8s_user }}"
+
+    - name: Debug kubeadm_join_command from controlplane host (optional)
+      ansible.builtin.debug:
+        var: hostvars[inventory_hostname]['kubeadm_join_command']
+      when: hostvars[inventory_hostname]['kubeadm_join_command'] is defined
+
+- name: Join Kubernetes worker nodes to cluster
+  hosts: "worker"
+  become: true
+
+  tasks:
+    - name: Join worker nodes with kubeadm join
+      ansible.builtin.include_tasks: ../tasks/kubernetes_worker.yaml
+      vars:
+        kubeadm_join_command: "{{ hostvars[groups['controlplane'][0]]['kubeadm_join_command'] }}"
+      when:
+        - hostvars[groups['controlplane'][0]]['kubeadm_join_command'] is defined
+        - hostvars[groups['controlplane'][0]]['kubeadm_join_command'] | length > 1

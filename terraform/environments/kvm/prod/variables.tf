@@ -47,6 +47,12 @@ variable "vm_memory" {
   default     = 4096
 }
 
+variable "os_volume_size" {
+  description = "VM OS disk size"
+  type        = string
+  default     = 10737418240 # 10GB
+}
+
 variable "vm_qemu_agent" {
   description = "Enable QEMU guest agent."
   type        = bool
@@ -68,7 +74,7 @@ variable "network_wait_for_lease" {
 # Variables for cloud-init module
 
 variable "data_file" {
-  description = "Path to a cloud-init user-data file with static values (no templating). When set all  When not set the default template and will be used."
+  description = "Path to a cloud-init user-data file with static values (no templating). When not set the default template will be used."
   type        = string
   default     = ""
 }
@@ -83,7 +89,7 @@ variable "username" {
 variable "gecos" {
   description = "User description in cloud-init"
   type        = string
-  default     = "System administrator"
+  default     = "System Administrator"
 }
 
 variable "groups" {
@@ -100,8 +106,8 @@ variable "shell" {
 
 variable "ssh_key" {
   type        = string
-  default     = ""
-  description = "SSH public key for the user in cloud-init"
+  default     = "~/.ssh/id_rsa.pub"
+  description = "SSH public key file for the user in cloud-init"
 }
 
 variable "sudo_privileges" {

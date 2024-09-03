@@ -30,7 +30,6 @@ locals {
 
   # set environment variables.
   environment = local.env_spec[local.current_env]
-
 }
 
 # Network module creates shared network infrastructure components for all environments. (vnet, subnets, default nsg for each subnet and load balancer)  
@@ -38,12 +37,13 @@ locals {
 module "network" {
   source = "../modules/network"
 
-  env                 = local.current_env
-  location            = local.environment.location
-  rg_name             = local.environment.rg_name
-  vnet_address_space  = local.environment.vnet_address_space
-  vnet_name           = local.environment.vnet_name
-  subnets             = local.environment.subnets
-  create_loadbalancer = var.create_loadbalancer
+  env                        = local.current_env
+  location                   = local.environment.location
+  rg_name                    = local.environment.rg_name
+  vnet_address_space         = local.environment.vnet_address_space
+  vnet_name                  = local.environment.vnet_name
+  subnets                    = local.environment.subnets
+  create_loadbalancer        = var.create_loadbalancer
+  allow_ssh_internet_inbound = var.allow_ssh_internet_inbound
 }
 

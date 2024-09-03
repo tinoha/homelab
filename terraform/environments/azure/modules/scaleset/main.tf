@@ -1,7 +1,7 @@
 
 # Resource Group
 resource "azurerm_resource_group" "sset" {
-  name     = var.rg_name
+  name     = "${var.env}-${var.rg_name}"
   location = var.location
   
   tags = {
@@ -11,7 +11,7 @@ resource "azurerm_resource_group" "sset" {
 
 # Orchestrated VM Scale Set
 resource "azurerm_orchestrated_virtual_machine_scale_set" "sset" {
-  name                = var.sset_name
+  name                = "${var.env}-${var.sset_name}"
   
   location            = azurerm_resource_group.sset.location
   resource_group_name = azurerm_resource_group.sset.name
@@ -53,11 +53,11 @@ resource "azurerm_orchestrated_virtual_machine_scale_set" "sset" {
     ip_configuration {
       name      = "ipconfig"
       subnet_id = var.subnet_id
+      primary = true
 
       # Attach to Load Balancer's Backend Pool
-      load_balancer_backend_address_pool_ids = var.bap_ids
-    
-    }
+      load_balancer_backend_address_pool_ids = can(var.bap_id) && length(var.bap_id) > 1 ? [var.bap_id] : null 
+     }
   }
 
   tags = {

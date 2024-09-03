@@ -1,0 +1,41 @@
+---
+- name: Initialize SSH known_hosts on Control Node
+  hosts: all
+  gather_facts: false
+
+  vars:
+    known_hosts_file: "{{ lookup('env', 'HOME') }}/.ssh/known_hosts"
+
+  tasks:
+    - name: Ensure .ssh directory exists on Control Node
+      ansible.builtin.file:
+        path: "{{ lookup('env', 'HOME') }}/.ssh"
+        state: directory
+        mode: "0700"
+      delegate_to: localhost
+
+    - name: Collect SSH host key for {{ inventory_hostname }}
+      delegate_to: localhost
+      ansible.builtin.command: "ssh-keyscan -T 5 {{ '-p ' + ansible_port | string if ansible_port is defined else '' }} {{ ansible_host }}"
+      register: ssh_key
+      ignore_errors: true
+
+    - name: Add SSH key to known_hosts
+      delegate_to: localhost
+      ansible.builtin.lineinfile:
+        path: "{{ known_hosts_file }}"
+        line: "{{ ssh_key.stdout }}"
+        create: true
+        state: present
+        mode: "600"
+      when:
+        - ssh_key.stdout is defined
+        - ssh_key.stdout != ""
+
+    # - name: Ensure SSH key is in known_hosts
+    #  delegate_to: localhost
+    #  ansible.builtin.known_hosts:
+    #    path: "{{ known_hosts_file }}"
+    #    name: "{{ [ansible_host] }}:{{ ansible_port }}"
+    #    key: "{{ ssh_key.stdout }}"
+    #    state: present

@@ -69,3 +69,7 @@ output "lb_name" {
   description = "The name of the Load Balancer"
   value       = module.network.lb_name
 }
+
+output "lb_public_ip" {
+  value = module.network.lb_public_ip
+}

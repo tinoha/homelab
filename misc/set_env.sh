@@ -1,0 +1,1 @@
+export TF_VAR_az_subscription_id = "your_azure_subscription_id"

@@ -1,0 +1,50 @@
+---
+- name: "Ensure user exists and ssh key is in ~/.ssh/authorized_keys ({{ user }})"
+  when:
+    - user is defined
+    - user | length > 1
+  block:
+    - name: "Ensure the user exists: {{ user }}"
+      ansible.builtin.user:
+        name: "{{ user }}"
+        state: present
+        shell: /bin/bash
+        create_home: true
+      register: user_result
+
+    - name: "Ensure ~/.ssh directory exists for user {{ user }}"
+      ansible.builtin.file:
+        path: "{{ user_result.home }}/.ssh"
+        state: directory
+        mode: "0700"
+        owner: "{{ user }}"
+        group: "{{ user_result.group }}"
+      when: user_result.home is defined
+
+    - name: "Check if the SSH key file exists on the local machine ({{ user_ssh_key_file }})"
+      ansible.builtin.stat:
+        path: "{{ user_ssh_key_file }}"
+      register: ssh_key_stat
+      delegate_to: localhost
+      become: false
+
+    - name: "Copy public SSH key to authorized_keys file of {{ user }}"
+      ansible.builtin.lineinfile:
+        create: true
+        group: "{{ user_result.group }}"
+        owner: "{{ user }}"
+        line: "{{ lookup('file', user_ssh_key_file) }}"
+        state: present
+        mode: "0600"
+        path: "{{ user_result.home }}/.ssh/authorized_keys"
+      when:
+        - user_result.home is defined
+        - ssh_key_stat.stat.exists
+
+    - name: "Allow passwordless sudo for user {{ user }}"
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        state: present
+        regexp: '^{{ user }} ALL=\(ALL\) NOPASSWD: ALL'
+        line: "{{ user }} ALL=(ALL) NOPASSWD: ALL"
+        validate: "visudo -cf %s"

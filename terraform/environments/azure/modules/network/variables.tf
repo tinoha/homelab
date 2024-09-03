@@ -24,7 +24,7 @@ variable "vnet_address_space" {
 
 variable "vnet_name" {
   description = "Name for the virtual network."
-  type = string
+  type        = string
 }
 
 
@@ -39,4 +39,10 @@ variable "subnets" {
 variable "create_loadbalancer" {
   description = "Create the shared load balancer or not "
   type        = bool
+}
+
+variable "allow_ssh_internet_inbound" {
+  description = "Allow SSH access from internet to subnets"
+  type        = bool
+  default     = false
 }
