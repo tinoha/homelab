@@ -259,12 +259,12 @@ This project is licensed under the MIT License. See the [LICENSE.txt](LICENSE.tx
 
 ### 9. Contributions
 
-This project is primarily a personal learning journey and a documentation of my progress with infrastructure automation and Kubernetes. While I welcome feedback, suggestions, and bug reports, please understand that the project is not designed for collaborative contributions at this time.
+This project is primarily a personal learning journey and a documentation of my progress with infrastructure automation and Kubernetes.
 
 If you have insights, constructive criticism, or have encountered any issues, feel free to reach out. Your input is valuable and may help improve the project or clarify my documentation for others who may benefit from it too.
 
-Thank you for your understanding, and I hope you find the content helpful!
+I hope you find the content helpful!
 
 ### 10. Contact Information
 
-For any inquiries, feedback, or suggestions, you can reach me by email at [your-email@example.com](mailto:your-email@example.com)
+For any inquiries, feedback, or suggestions, you can reach me by email at [tinoha10@outlook.com](tinoha10@outlook.com)

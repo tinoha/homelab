@@ -225,7 +225,7 @@ The following are essential requirements for the host system to create and manag
 7. Record the dynamic IP addresses of the VMs using the terraform output command. If you want to keep the IPs consistent over time, one option is to set up address reservations on your DHCP server.
 
    ```bash
-   # terraform output
+   terraform output
    ```
 
    ```bash
@@ -258,10 +258,9 @@ To remove all resources created by Terraform, navigate to the appropriate enviro
 
 1. Change directory to the specific environment:
 
-   ````bash
-   cd terraform/environments/<kvm|azure>/<env>
    ```bash
-   ````
+   cd terraform/environments/<kvm|azure>/<env>
+   ```
 
 2. Run the destroy command to clean up the resources:
    ```bash
