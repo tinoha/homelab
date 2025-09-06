@@ -1,0 +1,7 @@
+# Patch to update hostnames for homepage route
+- op: replace
+  path: /spec/hostnames
+  value:
+    - home.example.com
+    - www.home.example.com
+    - proxy.home.example.com

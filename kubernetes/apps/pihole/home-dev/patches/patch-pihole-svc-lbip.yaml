@@ -1,0 +1,4 @@
+# Assign cluster-specific static LoadBalancer IP for Pi-hole service
+- op: add
+  path: /spec/loadBalancerIP
+  value: 198.51.100.49 # Request this IP from LB

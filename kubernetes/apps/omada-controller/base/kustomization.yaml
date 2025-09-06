@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- omada-controller-ns.yaml
+- omada-controller-pv.yaml
+- omada-controller-pvc.yaml
+- omada-controller-statefulset.yaml
+- omada-controller-svc.yaml
+- omada-route.yaml
+
+namespace: omada

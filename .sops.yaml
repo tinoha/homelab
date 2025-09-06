@@ -1,0 +1,8 @@
+# Rules for SOPS encryption
+# Encrypt all yaml files under */secrets/* directory.
+
+creation_rules:
+# Encrypt all secrets files in home-dev directories
+  - path_regex: .*/secrets/.*.yam?l$
+    encrypted_regex: '^(data|stringData)$'
+    age: age1gvddufnnp3pdz8vu4cjylzzznt987ju05u7l9t8x4nefaylpu4aq7lvrxp

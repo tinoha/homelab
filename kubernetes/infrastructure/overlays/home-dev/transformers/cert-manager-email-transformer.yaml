@@ -1,0 +1,14 @@
+# PatchTransformer to update the ACME email in ClusterIssuer resources.
+apiVersion: builtin
+kind: PatchTransformer
+metadata:
+  name: acme-email-transformer
+patch: |-
+  - op: replace
+    path: /spec/acme/email
+    value: "user@example.com"
+target:
+  kind: ClusterIssuer
+  group: cert-manager.io
+  
+  

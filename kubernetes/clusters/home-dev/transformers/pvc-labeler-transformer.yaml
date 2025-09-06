@@ -1,0 +1,12 @@
+# Add label to PVCs to allow selection by pv-node-replacement.yaml in cluster kustomization.
+# Move this transformer to application kustomization file if you want to use it only for specific app(s).
+apiVersion: builtin
+kind: LabelTransformer
+metadata:
+  name: pvc-labeler
+labels:
+  kustomize/app-pvc: "true"
+fieldSpecs:
+- path: metadata/labels
+  create: true
+  kind: PersistentVolumeClaim

@@ -1,0 +1,34 @@
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore editor files
+*.swp
+*.swo
+*.idea/
+.vscode/
+
+# Do not include test
+/test/**
+
+# Ignore Kubernetes secret files (real secrets)
+**/secrets/*
+
+# Allow template files for secrets to be committed
+!**/secrets/*.template
+
+# Ignore local Terraform/Ansible state if present
+*.tfstate
+*.tfstate.backup
+.terraform/
+*.retry
+inventory.ini
+
+# Ignore logs
+logs/
+*.log
+
+# Ignore built artifacts / Docker images if any
+*.tar
+*.img
+*.tmp

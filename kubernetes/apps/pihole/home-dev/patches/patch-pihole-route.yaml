@@ -1,0 +1,5 @@
+# Patch to update hostnames for pihole route
+- op: replace
+  path: /spec/hostnames
+  value:
+    - pihole.dev.example.com

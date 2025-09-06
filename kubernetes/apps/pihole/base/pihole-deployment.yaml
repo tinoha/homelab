@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: pihole
+  name: pihole
+  namespace: pihole
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: pihole
+  template:
+    metadata:
+      labels:
+        app: pihole
+    spec:
+      volumes:
+        - name: pihole-etc
+          persistentVolumeClaim:
+            claimName: pihole-etc-pvc
+      containers:
+        - name: pihole
+          image: docker.io/pihole/pihole:latest
+          imagePullPolicy: Always
+          # envFrom:
+          #   - configMapRef:
+          #       name: pihole-cm
+          env:
+            - name: TZ
+              valueFrom:
+                configMapKeyRef:
+                  name: pihole-cm
+                  key: TZ
+            - name: FTLCONF_webserver_api_password
+              valueFrom:
+                secretKeyRef:
+                  name: pihole-secret
+                  key: FTLCONF_webserver_api_password
+            - name: FTLCONF_dns_upstreams
+              valueFrom:
+                configMapKeyRef:
+                  name: pihole-cm
+                  key: FTLCONF_dns_upstreams
+            - name: FTLCONF_dns_listeningMode
+              value: all
+            - name: FTLCONF_CHECK_DISK
+              value: "0"
+            - name: TAIL_FTL_LOG
+              value: "0"
+            - name: FTLCONF_dns_domain
+              valueFrom:
+                configMapKeyRef:
+                  name: pihole-cm
+                  key: FTLCONF_dns_domain
+            - name: FTLCONF_dns_expandHosts
+              value: "true"
+            - name: FTLCONF_dns_bogusPriv
+              value: "true"
+            - name: FTLCONF_dns_domainNeeded
+              value: "true"
+            - name: PIHOLE_UID
+              value: "2001"
+            - name: PIHOLE_GID
+              value: "2001"
+            - name: FTLCONF_dns_queryLogging
+              value: "false"
+          ports:
+            - containerPort: 53
+              name: pihole-dns-tcp
+              protocol: TCP
+            - containerPort: 53
+              name: pihole-dns-udp
+              protocol: UDP
+            - containerPort: 67
+              name: pihole-67-udp
+              protocol: UDP
+            - containerPort: 80
+              name: http
+              protocol: TCP
+            - containerPort: 443
+              name: https
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/pihole
+              name: pihole-etc

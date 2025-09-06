@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: omada-logs
+  namespace: omada
+  labels:
+    app: omada-controller
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOncePod
+  resources:
+    requests:
+      storage: 4Gi # Check official Omada docs and adjust acordingly
+  volumeName: omada-logs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: omada-data
+  namespace: omada
+  labels:
+    app: omada-controller
+spec:
+  storageClassName: local-path
+  accessModes:
+    - ReadWriteOncePod
+  resources:
+    requests:
+      storage: 8Gi # Check official Omada docs and adjust acordingly
+  volumeName: omada-data

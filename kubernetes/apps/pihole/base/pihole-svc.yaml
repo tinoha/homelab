@@ -1,0 +1,28 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: pihole
+  namespace: pihole
+spec:
+  selector:
+    app: pihole
+  ports:
+    - port: 53
+      targetPort: 53
+      name: pihole-dns-udp
+      protocol: UDP
+    - port: 53
+      targetPort: 53
+      name: pihole-dns-tcp
+      protocol: TCP
+    - name: pihole-http
+      port: 80
+    - name: pihole-https
+      port: 443
+    # - port: 67  # These only needed if pihole itself is a dhcp server
+    #   targetPort: 67
+    #   name: pihole-67-udp
+    #   protocol: UDP
+  type: LoadBalancer
+  # loadBalancerIP: YOUR_LB_IP_ADDRESS # Request certain IP addres. Must be available and part of LB IP pool.
+  # externalTrafficPolicy: Local #  Optional: Preserve source IPs

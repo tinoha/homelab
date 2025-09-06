@@ -1,0 +1,22 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: signalk
+  namespace: signalk
+  labels:
+    app: signalk
+  annotations:
+    konghq.com/protocols: https # Redirect always to https
+    konghq.com/https-redirect-status-code: "301"
+spec:
+  parentRefs:
+    - name: kong
+      namespace: gateway
+  hostnames:
+    - signalk.example.com
+  rules:
+    - matches:
+      backendRefs:
+        - name: signalk
+          kind: Service
+          port: 3000

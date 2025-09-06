@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../homepage/home-prod
+  - ../jellyfin/home-prod
+  - ../omada-controller/home-prod
+  - ../pihole/home-prod
+  - ../signalk/home-prod

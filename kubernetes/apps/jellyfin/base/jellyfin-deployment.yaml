@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+  namespace: jellyfin
+  labels:
+    app.kubernetes.io/name: jellyfin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: jellyfin
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: jellyfin
+    spec:
+      terminationGracePeriodSeconds: 200
+      initContainers: # Init directories ownership to match the uid/guid of the jellyfin container
+        - name: init-jellyfin
+          image: docker.io/jellyfin/jellyfin:latest
+          command:
+            - "sh"
+            - "-exc"
+            - |
+              if [ ! -f /config/init-data.lock ]; then
+                echo "Setting Jellyfin config and cache directory ownership and permissions" && 
+                chown -c 2050:2050 /config /cache && chmod 750 /config /cache && 
+                touch /config/init-data.lock
+              fi
+          volumeMounts:
+            - name: jellyfin-cache
+              mountPath: /cache
+            - name: jellyfin-config
+              mountPath: /config
+          securityContext:
+            runAsUser: 0
+      containers:
+        - name: jellyfin
+          image: docker.io/jellyfin/jellyfin:latest
+          ports:
+            - containerPort: 8096
+              name: http
+              protocol: TCP
+          volumeMounts:
+            - name: jellyfin-cache
+              mountPath: /cache
+            - name: jellyfin-config
+              mountPath: /config
+            - name: jellyfin-media
+              mountPath: /media
+              readOnly: true
+          securityContext:
+            runAsUser: 2050 # If you change user check also init container command
+            runAsGroup: 2050 # If you change user check also init container command
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+      volumes:
+        - name: jellyfin-cache
+          persistentVolumeClaim:
+            claimName: jellyfin-cache-pvc
+        - name: jellyfin-config
+          persistentVolumeClaim:
+            claimName: jellyfin-config-pvc
+        - name: jellyfin-media
+          persistentVolumeClaim:
+            claimName: jellyfin-media-pvc

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pihole-cm
+  namespace: pihole
+data:
+  FTLCONF_dns_upstreams: "1.1.1.1" # Cloudflare DNS
+  FTLCONF_dns_domain: "example.com" # Set your domain here
+  TZ: "Europe/Helsinki" # Set your timezone

@@ -1,0 +1,4 @@
+# Patch homepage deployment to update allowed hosts
+- op: replace
+  path: /spec/template/spec/containers/0/env/0/value
+  value: "198.51.100.15,home.example.com,www.home.example.com,proxy.home.example.com"

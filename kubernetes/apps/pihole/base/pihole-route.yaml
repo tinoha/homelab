@@ -1,0 +1,27 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  annotations:
+    konghq.com/https-redirect-status-code: "301"
+    konghq.com/protocols: https
+  name: pihole
+  namespace: pihole
+spec:
+  hostnames:
+  - pihole.example.com
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: kong
+    namespace: gateway
+  rules:
+  - backendRefs:
+    - group: ""
+      kind: Service
+      name: pihole
+      port: 80
+      weight: 1
+    matches:
+    - path:
+        type: PathPrefix
+        value: /

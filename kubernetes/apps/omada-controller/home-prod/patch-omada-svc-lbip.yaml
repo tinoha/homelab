@@ -1,0 +1,4 @@
+# Assign cluster-specific static LoadBalancer IP for Omada Controller service
+- op: add
+  path: /spec/loadBalancerIP
+  value: 198.51.100.2 # Request this IP from LB

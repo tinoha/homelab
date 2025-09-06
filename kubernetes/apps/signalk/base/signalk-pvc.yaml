@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: signalk-pvc
+  namespace: signalk
+  labels:
+    app: signalk
+spec:
+  accessModes:
+    - ReadWriteOncePod
+  resources:
+    requests:
+      storage: 2Gi
+  volumeName: signalk
+  storageClassName: local-path

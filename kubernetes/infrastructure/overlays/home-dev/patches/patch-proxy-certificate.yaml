@@ -1,0 +1,10 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: proxy-certificate
+  namespace: gateway
+spec:
+  dnsNames:
+    - dev.example.com
+    - "*.dev.example.com"
+
