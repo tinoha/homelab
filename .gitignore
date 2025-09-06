@@ -12,7 +12,7 @@ Thumbs.db
 /test/**
 
 # Ignore Kubernetes secret files (real secrets)
-**/secrets/*
+# **/secrets/*
 
 # Allow template files for secrets to be committed
 !**/secrets/*.template

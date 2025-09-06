@@ -3,7 +3,7 @@ kind: Kustomization
 
 resources:
 - omada-controller-ns.yaml
-- omada-controller-pv.yaml
+# - omada-controller-pv.yaml
 - omada-controller-pvc.yaml
 - omada-controller-statefulset.yaml
 - omada-controller-svc.yaml

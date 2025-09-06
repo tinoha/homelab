@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - pihole-svc.yaml
   - pihole-ns.yaml
-  - pihole-pv.yaml
+  # - pihole-pv.yaml
   - pihole-deployment.yaml
   - pihole-pvc.yaml
   - pihole-route.yaml

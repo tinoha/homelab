@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - jellyfin-ns.yaml
   - jellyfin-deployment.yaml
-  - jellyfin-pv.yaml
+  # - jellyfin-pv.yaml
   - jellyfin-pvc.yaml
   - jellyfin-svc.yaml
   - jellyfin-route.yaml

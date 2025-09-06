@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - signalk-ns.yaml
   - signalk-deployment.yaml
-  - signalk-pv.yaml
+  # - signalk-pv.yaml
   - signalk-pvc.yaml
   - signalk-svc.yaml
   - signalk-route.yaml
