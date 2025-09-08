@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - ../../pvs/base  # PersistentVolumes (local-path) for applications, adjust nodeNames in pv-nodename-transformer.yaml
   - ../../components/cert-manager/base
   - ../../components/metallb/base
   - ../../components/kong/base

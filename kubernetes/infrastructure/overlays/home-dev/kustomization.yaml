@@ -2,7 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ../../base
+  - ../../base # Common resources for all environments
+  - ../../pvs/base  # PersistentVolumes (local-path) for applications, adjust nodeNames in pv-nodename-transformer.yaml
   - ../../components/cert-manager/base
   - ../../components/metallb/base
   - ../../components/kong/base
