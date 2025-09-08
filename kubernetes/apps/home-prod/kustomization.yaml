@@ -7,3 +7,25 @@ resources:
   - ../omada-controller/home-prod
   - ../pihole/home-prod
   - ../signalk/home-prod
+
+images:
+  - name: docker.io/tihal/omada-controller
+    newTag: "5.15.24.18"
+  - name: docker.io/jellyfin/jellyfin
+    newTag: "10.10.7"
+  - name: docker.io/pihole/pihole
+    newTag: "2025.08.0"
+  - name: docker.io/teklife/homepage
+    newTag: latest  
+  - name: docker.io/teklife/signalk
+    newTag: latest
+  
+transformers:
+  - transformers/pvc-labeler-transformer.yaml # Add label to all pvcs to let pvc-update-transformer.yaml select them
+  - transformers/pvc-update-transformer.yaml # Remove volumename and/or storage class from PVCs
+
+# labels:
+#   - pairs:
+#       app.kubernetes.io/managed-by: kustomize
+#     includeSelectors: false
+#     includeTemplates: true

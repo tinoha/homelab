@@ -24,3 +24,9 @@ images:
 transformers:
   - transformers/pvc-labeler-transformer.yaml # Add label to all pvcs to let pvc-update-transformer.yaml select them
   - transformers/pvc-update-transformer.yaml # Remove volumename and/or storage class from PVCs
+
+# labels:
+#   - pairs:
+#       app.kubernetes.io/managed-by: kustomize
+#     includeSelectors: false
+#     includeTemplates: true

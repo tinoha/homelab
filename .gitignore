@@ -8,10 +8,11 @@ Thumbs.db
 *.idea/
 .vscode/
 
-# Do not include test
-/test/**
+# Do not include private stuff
+/private
+/test
 
-# Ignore Kubernetes secret files (real secrets)
+# Secret files are allowed, as they are encrypted with SOPS
 # **/secrets/*
 
 # Allow template files for secrets to be committed

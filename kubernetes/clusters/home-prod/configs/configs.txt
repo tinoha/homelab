@@ -1,8 +1,0 @@
-# Pihole
-DOMAIN_BASE=home.example.com
-# Homepage allowed hosts
-HOMEPAGE_ALLOWED_HOSTS=198.51.100.15,home.example.com,www.home.example.com,proxy.home.example.com
-# PV node name patch for selected PVs
-PV_NODE_NAME=k8s-prod-1
-# StorageClassName for selected PVCs
-PVC_STORAGE_CLASS=local-path

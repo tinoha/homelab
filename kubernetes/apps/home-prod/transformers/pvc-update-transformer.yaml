@@ -1,0 +1,33 @@
+# Multiple PatchTransformers to modify PersistentVolumeClaims (PVCs).
+# Customize as needed for your cluster setup.
+
+# Remove volumeName from PVCs to allow dynamic binding to PVs based on storageClass.
+
+# apiVersion: builtin
+# kind: PatchTransformer
+# metadata:
+#   name: remove-volumeName-pvc
+# patch: |-
+#   - op: remove
+#     path: /spec/volumeName
+# target:
+#   kind: PersistentVolumeClaim
+#   labelSelector: "kustomize/app-pvc=true"
+
+---
+# Update storageClassName in PVCs to match current cluster storage class.
+# Only PVCs with label kustomize/app-pvc: "true" are affected.
+# Used with pvc-label-transformer.yaml to select all PVCs that should be updated.
+apiVersion: builtin
+kind: PatchTransformer
+metadata:
+  name: update-storageclass-pvc
+patch: |-
+  - op: remove
+    path: /spec/storageClassName
+  - op: add
+    path: /spec/storageClassName
+    value: local-path
+target:
+  kind: PersistentVolumeClaim
+  labelSelector: "kustomize/app-pvc=true"

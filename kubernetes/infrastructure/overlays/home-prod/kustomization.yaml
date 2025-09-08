@@ -8,15 +8,17 @@ resources:
   - ../../components/kong/base
   - secrets/cloudflare-api-token-secret.yaml  # Cloudflare API token for cert-manager
 
-labels:
-  - pairs:
-      app.kubernetes.io/managed-by: kustomize
-    includeSelectors: false
-    includeTemplates: true
-
 patches:
   - path: patches/patch-proxy-certificate.yaml # Set domain names for the proxy certificate
   - path: patches/patch-metallb-ip-pool.yaml # Set IP address pool for MetalLB
 
 transformers:
   - transformers/cert-manager-email-transformer.yaml # Set email for cert-manager ClusterIssuers
+  - transformers/pv-labeler-transformer.yaml # Add label to all pvs to let pvc-update-transformer.yaml select them
+  - transformers/pv-nodename-transformer.yaml # Set PV node affinity node names on PVs
+
+# labels:
+#   - pairs:
+#       app.kubernetes.io/managed-by: kustomize
+#     includeSelectors: false
+#     includeTemplates: true
