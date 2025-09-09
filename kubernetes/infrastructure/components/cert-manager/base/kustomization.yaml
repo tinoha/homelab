@@ -7,3 +7,5 @@ resources:
   - letsencrypt-prod-clusterissuer.yaml
   - letsencrypt-staging-clusterissuer.yaml
   - proxy-certificate.yaml
+  - cert-manager-helmrepository.yaml # cert-manager HelmRepository
+  - cert-manager-helmrelease.yaml # cert-manager HelmRelease
