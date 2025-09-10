@@ -15,9 +15,9 @@ images:
     newTag: "10.10.7"
   - name: docker.io/pihole/pihole
     newTag: "2025.08.0"
-  - name: docker.io/teklife/homepage
+  - name: ghcr.io/gethomepage/homepage
     newTag: latest  
-  - name: docker.io/teklife/signalk
+  - name: docker.io/signalk/signalk-server
     newTag: latest
   
 
