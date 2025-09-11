@@ -6,7 +6,8 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-  - name: infra
+  - name: infra-controllers
+  - name: infra-configs
   - name: apps
   interval: 1h0m0s
   path: ./kubernetes/clusters/home-prod/overlays
@@ -16,3 +17,8 @@ spec:
     name: flux-system
   timeout: 2m0s
   wait: true
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  
