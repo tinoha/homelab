@@ -2,12 +2,12 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ../../base # Common resources for all environments
-  - ../../pvs/base  # PersistentVolumes (local-path) for applications, adjust nodeNames in pv-nodename-transformer.yaml
-  - ../../components/cert-manager/base
-  - ../../components/metallb/base
-  - ../../components/kong/base
+  - ../base/namespaces
+  - ../base/pvs  # PersistentVolumes (local-path) for applications, adjust nodeNames in pv-nodename-transformer.yaml
+  - ../base/cert-manager
   - secrets/cloudflare-api-token-secret.yaml  # Cloudflare API token for cert-manager
+  - ../base/metallb
+  - ../base/kong
 
 patches:
   - path: patches/patch-proxy-certificate.yaml # Set domain names for the proxy certificate
@@ -18,8 +18,3 @@ transformers:
   - transformers/pv-labeler-transformer.yaml # Add label to all pvs to let pvc-update-transformer.yaml select them
   - transformers/pv-nodename-transformer.yaml # Set PV node affinity node names on PVs
 
-# labels:
-#   - pairs:
-#       app.kubernetes.io/managed-by: kustomize
-#     includeSelectors: false
-#     includeTemplates: true

@@ -6,7 +6,8 @@ metadata:
   namespace: flux-system
 spec:
   dependsOn:
-  - name: infra
+  - name: infra-controllers
+  - name: infra-configs
   interval: 1h0m0s
   path: ./kubernetes/apps/home-dev
   prune: true
