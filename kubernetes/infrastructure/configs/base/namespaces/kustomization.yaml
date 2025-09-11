@@ -3,4 +3,3 @@ kind: Kustomization
 
 resources:
 - gateway-ns.yaml
-# - kustomize-ns.yaml
