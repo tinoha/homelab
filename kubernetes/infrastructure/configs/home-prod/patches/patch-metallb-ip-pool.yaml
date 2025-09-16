@@ -6,10 +6,8 @@ metadata:
 spec:
   addresses:
     - 198.51.100.16-198.51.100.19
-    - 198.51.100.2-198.51.100.3
 
 ---
-
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:

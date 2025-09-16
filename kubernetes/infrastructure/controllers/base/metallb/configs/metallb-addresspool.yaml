@@ -6,5 +6,5 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-    - 192.0.2.10-192.0.2.20  # reserved TEST-NET-1 range, won't conflict  # placeholder, will be patched
+    - 192.0.2.10-192.0.2.19  # reserved TEST-NET-1 range, won't conflict  # placeholder, will be patched
   autoAssign: true
