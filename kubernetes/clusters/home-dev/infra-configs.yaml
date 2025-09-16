@@ -1,0 +1,23 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: infra-configs
+  namespace: flux-system
+spec:
+  dependsOn:
+  - name: infra-controllers
+  - name: metallb-configs
+  interval: 1h0m0s
+  path: ./kubernetes/infrastructure/configs/home-dev
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  timeout: 15m
+  wait: true
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  

@@ -5,4 +5,4 @@ resources:
   - metallb-addresspool.yaml
   - metallb-L2Advertisement.yaml
 
-namespace: metallb-system
+  

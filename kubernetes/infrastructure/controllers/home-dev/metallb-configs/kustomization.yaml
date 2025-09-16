@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base/metallb/configs
+  
+patches:
+  - target:
+      kind: IPAddressPool
+      name: proxy-ip-pool
+      namespace: metallb-system
+    patch: |-
+      - op: replace
+        path: /spec/addresses/0
+        value: 198.51.100.45/32

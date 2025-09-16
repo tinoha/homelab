@@ -2,24 +2,22 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: cert-manager
-  namespace: cert-manager
+  name: metallb
+  namespace: metallb-system
 spec:
   chart:
     spec:
-      chart: cert-manager
+      chart: metallb
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
-        name: jetstack
+        name: metallb
         namespace: flux-system
-      version: "v1.18.2"
+      version: "~0.15.2"
+      # valuesFiles:
+      #   - values.yaml
   interval: 6h0m0s
   # timeout: 10m0s
-   
-  values:
-    crds:
-      enabled: true
   
   install:
     createNamespace: true
@@ -32,3 +30,7 @@ spec:
     remediation:
       retries: 2
       remediateLastFailure: true
+
+  values:
+    crds:
+      enabled: true

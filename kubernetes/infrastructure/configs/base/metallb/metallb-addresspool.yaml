@@ -2,9 +2,20 @@
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
-  name: default-addresspool
+  name: apps-ip-pool
   namespace: metallb-system
 spec:
   addresses:
-  - 0.0.0.0/32  # placeholder, will be patched
+    - 192.0.2.20-192.0.2.29  # reserved TEST-NET-1 range, won't conflict  # placeholder, will be patched
   autoAssign: true
+
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: apps-ip-pool-noauto
+  namespace: metallb-system
+spec:
+  addresses:
+    - 192.0.2.30-192.0.2.39  # reserved TEST-NET-1 range, won't conflict  # placeholder, will be patched
+  autoAssign: false

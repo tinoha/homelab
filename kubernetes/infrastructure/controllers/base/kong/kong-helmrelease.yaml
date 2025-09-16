@@ -5,6 +5,10 @@ metadata:
   name: kong
   namespace: kong
 spec:
+  dependsOn:
+    # Ensure that MetalLB is installed before Kong to allow the LoadBalancer service to be created successfully
+    - name: metallb
+      namespace: metallb-system
   chart:
     spec:
       chart: ingress
@@ -13,9 +17,24 @@ spec:
         kind: HelmRepository
         name: kong
         namespace: flux-system
-      version: ~0.21.0
+      version: "~0.21.0"
       valuesFiles:
         - values.yaml
+  interval: 6h0m0s
+  # timeout: 10m0s
+  
   install:
     createNamespace: true
-  interval: 24h0m0s
+    crds: CreateReplace
+    remediation:
+      retries: 2
+      remediateLastFailure: true
+
+  upgrade:
+    remediation:
+      retries: 2
+      remediateLastFailure: true
+  
+  # values:
+  #   crds:
+  #     enabled: true

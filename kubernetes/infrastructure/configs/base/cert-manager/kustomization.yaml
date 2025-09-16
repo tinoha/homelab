@@ -3,7 +3,6 @@ kind: Kustomization
 
 resources:
   # - cloudflare-api-token-secret.yaml
-  - proxy-certificate.yaml
   - letsencrypt-prod-clusterissuer.yaml
   - letsencrypt-staging-clusterissuer.yaml
   

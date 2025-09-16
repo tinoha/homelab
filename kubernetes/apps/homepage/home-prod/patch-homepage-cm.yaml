@@ -17,8 +17,8 @@ data:
             description: Signalk Marine Data Server
             icon: https://signalk.org/_astro/favicon.D8Mzuhqg.ico
             siteMonitor: http://signalk.signalk.svc.cluster.local
-            
-    - Administration:
+
+    - Admin Tools:
         - Pi-hole:
             href: https://pihole.home.example.com/admin/
             description: Pi-hole Local DNS server

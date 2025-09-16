@@ -1,0 +1,10 @@
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: proxy-ip-pool
+  namespace: metallb-system
+spec:
+  addresses:
+    - 192.0.2.10-192.0.2.20  # reserved TEST-NET-1 range, won't conflict  # placeholder, will be patched
+  autoAssign: true
