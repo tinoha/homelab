@@ -62,6 +62,10 @@ for f in "${FILES[@]}"; do
   else
     echo "Processing $f"
     if [[ "$ACTION" == "encrypt" ]]; then
+      if grep -q '^sops:' "$f"; then
+        echo "Skipping already encrypted file: $f"
+        continue
+      fi
       sops -e -i "$f"
     else
       sops -d -i "$f"
