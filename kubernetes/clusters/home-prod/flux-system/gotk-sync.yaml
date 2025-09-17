@@ -19,7 +19,7 @@ metadata:
   name: flux-system
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 1h0m
   path: ./kubernetes/clusters/home-prod
   prune: true
   sourceRef:
