@@ -20,6 +20,7 @@ spec:
       version: "~0.21.0"
       valuesFiles:
         - values.yaml
+  releaseName: kong
   interval: 6h0m0s
   # timeout: 10m0s
   
