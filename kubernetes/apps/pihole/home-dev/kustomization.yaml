@@ -3,7 +3,7 @@ kind: Kustomization
 
 resources:
 - ../base
-- secrets/pihole-secret.yaml
+- secrets/pihole-externalsecret.yaml
 
 namespace: pihole
 
@@ -27,6 +27,5 @@ patches:
       name: pihole-cm
       namespace: pihole
     path: patches/patch-pihole-cm-dns.yaml
-    
 
 

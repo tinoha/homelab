@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - metallb-controller-kustomization.yaml
   - metallb-configs-kustomization.yaml
+  - ../base/external-secrets
   - ../base/cert-manager
   - ../base/kong
   

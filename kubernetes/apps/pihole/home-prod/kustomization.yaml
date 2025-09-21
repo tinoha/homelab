@@ -3,7 +3,7 @@ kind: Kustomization
 
 resources:
 - ../base
-- secrets/pihole-secret.yaml
+- secrets/pihole-externalsecret.yaml
 
 namespace: pihole
 

@@ -4,15 +4,17 @@ kind: Kustomization
 resources:
   - ../base/pvs  # PersistentVolumes (local-path) for applications, adjust nodeNames in pv-nodename-transformer.yaml
   - ../base/metallb  # LoadBalancer implementation for bare-metal clusters
+  - ../base/external-secrets
   - ../base/cert-manager
   - ../base/gateway
-  - secrets/cloudflare-api-token-secret.yaml  # Cloudflare API token for cert-manager
   
 patches:
   - path: patches/patch-proxy-certificate.yaml # Set domain names for the proxy certificate
   - path: patches/patch-metallb-ip-pool.yaml # Set IP address pool for MetalLB
+  - path: secrets/patch-azure-clustersecretstore.yaml # Patch azure clustersecretstore with correct tenantId and vaultUrl
 
 transformers:
   - transformers/cert-manager-email-transformer.yaml # Set email for cert-manager ClusterIssuers
   - transformers/pv-labeler-transformer.yaml # Add label to all pvs to let pvc-update-transformer.yaml select them
   - transformers/pv-nodename-transformer.yaml # Set PV node affinity node names on PVs
+

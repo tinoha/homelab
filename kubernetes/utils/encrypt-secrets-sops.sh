@@ -46,7 +46,7 @@ fi
 
 # Find all YAML manifests under secrets/ directories
 # mapfile -t FILES < <(find . -type f \( -name "*.yaml" -o -name "*.yml" \) -path "*/secrets/*")
-mapfile -t FILES < <(find . -type f -regex '.*\.ya?ml' -path '*/secrets/*')
+mapfile -t FILES < <(find . -type f -regex '.*\.ya?ml' -path '*/secrets/*' -not -regex '.*externalsecret.*\.ya?ml' -not -regex '.*example.*\.ya?ml')
 
 if [[ ${#FILES[@]} -eq 0 ]]; then
   echo "No secret manifests found."

@@ -1,0 +1,25 @@
+installCRDs: true
+
+crds:
+  # -- If true, create CRDs for Cluster External Secret.
+  # createClusterExternalSecret: true
+  # -- If true, create CRDs for Cluster Secret Store.
+  createClusterSecretStore: true
+  # -- If true, create CRDs for Cluster Generator.
+  # createClusterGenerator: true
+  # -- If true, create CRDs for Cluster Push Secret.
+  # createClusterPushSecret: true
+  # -- If true, create CRDs for Push Secret.
+  # createPushSecret: true
+
+# -- if true, the operator will process cluster external secret. Else, it will ignore them.
+processClusterExternalSecret: false
+
+# -- if true, the operator will process cluster push secret. Else, it will ignore them.
+processClusterPushSecret: false
+
+# -- if true, the operator will process cluster store. Else, it will ignore them.
+processClusterStore: true
+
+# -- if true, the operator will process push secret. Else, it will ignore them.
+processPushSecret: false
