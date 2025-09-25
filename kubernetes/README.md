@@ -6,7 +6,7 @@
 This repository contains the configuration of my Kubernetes-based homelab.  
 The main purpose of this setup is to learn and practice modern cloud-native technologies and GitOps practices in a production-like environment. The homelab also runs a few applications for family use, which need to stay available and keep data secured.  
 
-The cluster is based on a single-node [K3s](https://k3s.io/) installation and is managed fully in a GitOps way with [FluxCD](https://fluxcd.io/). All Kubernetes infrastructure and applications are defined declaratively in this repository.  
+The cluster is based on a single-node [K3s](https://k3s.io/) installation and is managed fully in a GitOps way with [FluxCD](https://fluxcd.io/). All Kubernetes infrastructure and applications are defined declaratively in this repository. The repository contains configuration for two cluster environments: Production (home-prod) and development (home-dev) — each with its own Kustomize overlays.
 
 Please note: this repository is specific to my homelab setup and is not meant for direct, generic deployment. It can be used as a reference, and if you want to build something similar, see the [Deployment Notes](#deployment-notes) chapter for guidance.
 
@@ -80,6 +80,17 @@ Below are some areas I may look into improving or implementing in the future.
 |               | Lock down OS firewall to allow only SSH and Kong proxy ports.                         | Planned |
 | **Observability** | Deploy monitoring and alerting (e.g., Prometheus, Grafana, Alertmanager).          | Planned |
 | **GitOps**    | Extend GitOps to OS level with declarative OS like [Talos](https://www.talos.dev/) or [NixOS](https://nixos.org/). | Planned |
+
+## 📂 Directory Structure
+
+A quick overview of the main directories under `kubernetes/` and their purpose:
+
+| Directory         | Purpose |
+|------------------|---------|
+| `clusters/`       | Environment-specific overlays for `home-prod` and `home-dev`. |
+| `infrastructure/` | Cluster infrastructure components such controllers and configs |
+| `apps/`           | Application definitions grouped per app. |
+| `bootstrap/`      | Scripts and instructions to bootstrap a cluster from this repo. |
 
 
 ## 📦 Deployment Notes  
