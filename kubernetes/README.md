@@ -1,63 +1,98 @@
 
+# 🏠Homelab
+
+## 📘 Introduction 
+
+This repository contains the configuration of my Kubernetes-based homelab.  
+The main purpose of this setup is to learn and practice modern cloud-native technologies and GitOps practices in a production-like environment. The homelab also runs a few applications for family use, which need to stay available and keep data secured.  
+
+The cluster is based on a single-node [K3s](https://k3s.io/) installation and is managed fully in a GitOps way with [FluxCD](https://fluxcd.io/). All Kubernetes infrastructure and applications are defined declaratively in this repository.  
+
+Please note: this repository is specific to my homelab setup and is not meant for direct, generic deployment. It can be used as a reference, and if you want to build something similar, see the [Deployment Notes](#deployment-notes) chapter for guidance.
+
+## ⚙️ Design Principles
+
+Here I explain the design philosophy and goals I try to follow when developing this homelab.
+
+- **GitOps first**: Git is the single source of truth for both infrastructure and application configurations. FluxCD keeps the cluster state in sync with this repository.  
+- **Modularity**: Separation between infrastructure, applications, and cluster definitions.  
+- **Environment overlays**: Multiple environments (dev, prod) are handled with Kustomize overlays, avoiding duplication of base manifests.
+- **Secrets management**: No secrets in Git. Sensitive data is handled with SOPS and [External Secrets Operator](https://external-secrets.io/) connected to Azure Key Vault.  
+- **Production practices**: Try to use technologies and patterns that fit into real corporate production environments.  
+- **Avoid vendor lock-in**: Use modular designs and decouple components so switching tools is possible.  
+- **Kubernetes-native**: Prefer Kubernetes and cloud-native APIs over custom tooling. For example, use [Gateway API](https://gateway-api.sigs.k8s.io/) to define and control inbound traffic centrally.  
+- **TLS everywhere**: Use real X.509 certificates issued through [cert-manager](https://cert-manager.io/) and terminated by [Kong Gateway](https://konghq.com/).  
+- **Bootstrap automation**: New clusters can be bootstrapped quickly with scripts provided in `bootstrap/`.  
+- **Layered structure**: CRDs, controllers, configs, and applications are separated into their own kustomizations.
+- **Single node cluster**: One node is reliable enough for my use case and with GitOps, replacing hardware or rebuilding the cluster is fast enough. A multi-node cluster with distributed storage (like Longhorn) would be nice, but for current needs it would be overkill and expensive.
+  
+
+## 🛠️ Technology Stack 
+
+This homelab is built on two main layers: **platform components** that provide the foundation, and **applications** that run on top of it.  
 
 
-# Homelab Kubernetes Services Deployment Instructions
+### Kubernetes Platform
+Core components that make the cluster run and provide the services needed to deploy and manage applications.  
 
-- Helm commands needed to add repositories and install/update the core services (Metallb, Kong, Cert-Manager)
-- Deploy services/apps with Kustomize. 
+| Logo | Name | Description |  
+|------|------|-------------| 
+| <img src="https://k3s.io/img/favicon.ico" width="28"/> | [K3s](https://k3s.io/) | Lightweight Kubernetes distribution.
+| <img src="https://raw.githubusercontent.com/flannel-io/flannel/master/logos/flannel-glyph-color.svg" width="20"/> | [Flannel](https://github.com/flannel-io/flannel) | Default CNI plugin used by K3s. 
+| <img src="https://fluxcd.io/favicons/favicon.ico" width="32"/> | [FluxCD](https://fluxcd.io/) | GitOps operator keeping cluster state in sync with this repo. |  
+| <img src="https://cert-manager.io/images/cert-manager-logo-icon.svg" width="32"/> | [cert-manager](https://cert-manager.io/) | Automated TLS certificate management with Let’s Encrypt (via Cloudflare). |  
+| <img src="https://external-secrets.io/latest/pictures/eso-round-logo.svg" width="32"/> | [External Secrets Operator](https://external-secrets.io/) | Integrates Kubernetes with external secret stores (Azure Key Vault in this setup). |  
+| <img src="https://getsops.io/favicons/favicon.ico" width="32"/> | [SOPS](https://getsops.io/) | Encrypts and manages secrets and sensitive configuration data stored in Git.
+| <img src="https://kong.github.io/icons/favicon.ico" width="28"/> | [Kong Gateway](https://konghq.com/) | API Gateway configured via Gateway API resources using [Kong Ingress Controller](https://konghq.com/products/kong-ingress-controller).|  
+| <img src="https://raw.githubusercontent.com/metallb/metallb/main/website/static/images/logo/metallb-blue.svg" width="28"/> | [MetalLB](https://metallb.universe.tf/) | LoadBalancer implementation for bare-metal Kubernetes clusters. |
 
-## Prerequisites
-NOTE: Install required CRDS first.
-
-k apply -f crds/
-
-## 1. Add Helm Repositories
-helm repo add metallb https://metallb.github.io/metallb --force-update
-helm repo add kong https://charts.konghq.com --force-update
-helm repo add jetstack https://charts.jetstack.io --force-update
-helm repo update
-
-## 2. Install / Upgrade Services with Helm
-
-### Metallb
-helm upgrade --install metallb metallb/metallb \
-  --namespace metallb-system \
-  --create-namespace
-
-### Kong Ingress
-helm upgrade --install kong kong/ingress \
-  --namespace kong \
-  --create-namespace
-
-### Cert-Manager
-helm upgrade --install cert-manager jetstack/cert-manager \
-  --namespace cert-manager \
-  --create-namespace \
-  --version v1.17.2 \
-  --set crds.enabled=true
-
-### Verify Deployments
-kubectl get pods -n metallb-system
-kubectl get pods -n kong
-kubectl get pods -n cert-manager
-
-## 3. Deploy Apps/Services with Kustomize
-
-### Dry-run to preview manifests:
-kubectl kustomize .
-kubectl apply -k . --dry-run=client 
-
-### Apply all application manifests
-kubectl apply -k .
+### Applications
+Here is the lists of apps running in the cluster. Pihole provided DNS service, and Omada is used to manage home networking (router, switch and APs). Rest of the apps are for family use or just for learning.
 
 
-## 4 Verify All Deployments
+| Name                                          | Description                                       |
+| ------------------------------------------------- | ------------------------------------------------- |
+| **[Pi-hole](https://pi-hole.net/)**          | DNS resolver and ad-blocker with a nice UI.      |
+| **[Homepage](https://gethomepage.dev/)**          | Dashboard homepage for all apps and services.    |
+| **[Jellyfin](https://jellyfin.org/)**         | Media streaming service.                           |
+| **[Omada Software Controller](https://www.omadanetworks.com/en/business-networking/omada/controller/)** | TP-Link SDN network controller.                    |
+| **[SignalK](https://signalk.org/)**          | Open marine data platform. |
 
-### Check Helm releases
-helm list -A
+### 💻 Infrastructure
+The homelab runs on a small, efficient setup suitable for a single-node cluster. Current configuration:
+| Component | Details | Idle Resource Usage |
+|-----------|--------|------------|
+| CPU       | Intel N100 (4 cores) | 5–7% (load 0.06) |
+| Memory    | 16 GB | 35% |
+| Storage   | Samsung EVO 860 1TB SATA | – |
+| OS        | Ubuntu 24.04 LTS | – |
 
-### Check running pods
-kubectl get pods -A
 
-Check Services
-###kubectl get svc -A
+## 🚀 Future Ideas
+
+This environment is a work in progress and will likely never be “ready”.  
+Below are some areas I may look into improving or implementing in the future.  
+
+| Area          | Idea / Improvement                                                                 | Status / Notes |
+|---------------|--------------------------------------------------------------------------------------|----------------|
+| **Security** | Implement network policies to restric pod-to-pod traffic (requires replacing Flannel). | Planned |
+|               | Add central authentication/SSO with [Authentik](https://goauthentik.io/).             | Planned |
+|               | Lock down OS firewall to allow only SSH and Kong proxy ports.                         | Planned |
+| **Observability** | Deploy monitoring and alerting (e.g., Prometheus, Grafana, Alertmanager).          | Planned |
+| **GitOps**    | Extend GitOps to OS level with declarative OS like [Talos](https://www.talos.dev/) or [NixOS](https://nixos.org/). | Planned |
+
+
+## 📦 Deployment Notes  
+
+This repository is not generic and cannot be deployed as-is, but it can be used as a reference for building a homelab with GitOps. Typical customizations you may need to perform include:  
+- Adjust or remove static PersistentVolume definitions  
+- Update application PVC storage class definitions  
+- Provide your own [Azure Key Vault](https://azure.microsoft.com/en-us/services/key-vault/) and configure access  
+- Provide your own Cloudflare API token for certificate management  
+- Generate and configure your own [SOPS](https://github.com/getsops/sops) age key  
+- Review secrets, domains, IPs, and certificates configuration  
+
+For detailed steps on how this specific homelab configuration is bootstrapped, see the [bootstrap guide](./bootstrap/README.md).
+
+## 📄 License
+This project is licensed under the [MIT License](./LICENSE).
