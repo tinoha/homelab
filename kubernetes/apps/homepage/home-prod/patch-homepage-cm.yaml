@@ -12,13 +12,6 @@ data:
             description: Jellyfin Media Server
             icon: jellyfin.png
             siteMonitor: http://jellyfin.jellyfin.svc.cluster.local
-        - Signalk:
-            href: http://signalk.home.example.com
-            description: Signalk Marine Data Server
-            icon: https://signalk.org/_astro/favicon.D8Mzuhqg.ico
-            siteMonitor: http://signalk.signalk.svc.cluster.local
-
-    - Admin Tools:
         - Pi-hole:
             href: https://pihole.home.example.com/admin/
             description: Pi-hole Local DNS server
@@ -29,4 +22,11 @@ data:
              description: TP-Link Omada Software Controller
              icon: omada.png
              siteMonitor: https://omada-controller.omada.svc.cluster.local
+
+    - Experimental:
+        - Signalk:
+            href: http://signalk.home.example.com
+            description: Signalk Marine Data Server
+            icon: https://signalk.org/_astro/favicon.D8Mzuhqg.ico
+            siteMonitor: http://signalk.signalk.svc.cluster.local
     
