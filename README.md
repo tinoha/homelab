@@ -31,6 +31,7 @@ Here I explain the design philosophy and goals I try to follow when developing t
 
 This homelab is built on two main layers: **platform components** that provide the foundation, and **applications** that run on top of it.  
 
+
 ### Kubernetes Platform
 Core components that make the cluster run and provide the services needed to deploy and manage applications.  
 
@@ -102,7 +103,7 @@ This repository is not generic and cannot be deployed as-is, but it can be used 
 - Generate and configure your own [SOPS](https://github.com/getsops/sops) age key  
 - Review secrets, domains, IPs, and certificates configuration  
 
-For detailed steps on how this specific homelab configuration is bootstrapped, see the [bootstrap guide](./kubernetes/bootstrap/README.md).
+For detailed steps on how this specific homelab configuration is bootstrapped, see the [bootstrap guide](./bootstrap/README.md).
 
 ## 📄 License
 This project is licensed under the [MIT License](./LICENSE).
