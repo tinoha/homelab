@@ -1,5 +1,6 @@
 
 # 🏠Homelab
+![](./doc/homepage.png)
 
 ## 📘 Introduction 
 
