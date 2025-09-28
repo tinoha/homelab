@@ -1,15 +1,18 @@
 
 # 🏠Homelab
-![](./doc/homepage.png)
+
+<img src="./doc/homepage.png" width="600">
 
 ## 📘 Introduction 
 
 This repository contains the configuration of my Kubernetes-based homelab.  
-The main purpose of this setup is to learn and practice modern cloud-native technologies and GitOps practices in a production-like environment. The homelab also runs a few applications for family use, which need to stay available and keep data secured.  
+The main purpose of this setup is to learn and practice modern cloud-native technologies and GitOps practices in a production-like environment while also runnning a few always on applications.   
 
-The cluster is based on a single-node [K3s](https://k3s.io/) installation and is managed fully in a GitOps way with [FluxCD](https://fluxcd.io/). All Kubernetes infrastructure and applications are defined declaratively in this repository. The repository contains configuration for two cluster environments: Production (home-prod) and development (home-dev) — each with its own Kustomize overlays.
+The cluster runs on a single-node [K3s](https://k3s.io/) installation and is managed fully in a GitOps style with [FluxCD](https://fluxcd.io/). All Kubernetes infrastructure and applications are defined declaratively in this repository, with Kustomize overlays for two environments: Production (home-prod) and development (home-dev).
 
-Please note: this repository is specific to my homelab setup and is not meant for direct, generic deployment. It can be used as a reference, and if you want to build something similar, see the [Deployment Notes](#deployment-notes) chapter for guidance.
+Please note:
+- Sensitive values (IPs, domains, emails) are sanitized before publishing. See [Sanitization](#sanitization) chapter for details.
+- This repository is specific to my homelab setup and not a ready-to-use template. If you would like to build something similar, see [Deployment Notes](#deployment-notes).
 
 ## ⚙️ Design Principles
 
@@ -32,7 +35,6 @@ Here I explain the design philosophy and goals I try to follow when developing t
 
 This homelab is built on two main layers: **platform components** that provide the foundation, and **applications** that run on top of it.  
 
-
 ### Kubernetes Platform
 Core components that make the cluster run and provide the services needed to deploy and manage applications.  
 
@@ -40,7 +42,7 @@ Core components that make the cluster run and provide the services needed to dep
 |------|------|-------------| 
 | <img src="https://k3s.io/img/favicon.ico" width="28"/> | [K3s](https://k3s.io/) | Lightweight Kubernetes distribution.
 | <img src="https://raw.githubusercontent.com/flannel-io/flannel/master/logos/flannel-glyph-color.svg" width="20"/> | [Flannel](https://github.com/flannel-io/flannel) | Default CNI plugin used by K3s. 
-| <img src="https://fluxcd.io/favicons/favicon.ico" width="32"/> | [FluxCD](https://fluxcd.io/) | GitOps operator keeping cluster state in sync with this repo. |  
+| <img src="https://fluxcd.io/favicons/favicon.ico" width="32"/> | [FluxCD](https://fluxcd.io/) | GitOps operator keeping cluster state in sync with the repo. |  
 | <img src="https://cert-manager.io/images/cert-manager-logo-icon.svg" width="32"/> | [cert-manager](https://cert-manager.io/) | Automated TLS certificate management with Let’s Encrypt (via Cloudflare). |  
 | <img src="https://external-secrets.io/latest/pictures/eso-round-logo.svg" width="32"/> | [External Secrets Operator](https://external-secrets.io/) | Integrates Kubernetes with external secret stores (Azure Key Vault in this setup). |  
 | <img src="https://getsops.io/favicons/favicon.ico" width="32"/> | [SOPS](https://getsops.io/) | Encrypts and manages secrets and sensitive configuration data stored in Git.
@@ -49,7 +51,6 @@ Core components that make the cluster run and provide the services needed to dep
 
 ### Applications
 Here is the lists of apps running in the cluster. Pihole provided DNS service, and Omada is used to manage home networking (router, switch and APs). Rest of the apps are for family use or just for learning.
-
 
 | Name                                          | Description                                       |
 | ------------------------------------------------- | ------------------------------------------------- |
@@ -67,7 +68,6 @@ The homelab runs on a small, efficient setup suitable for a single-node cluster.
 | Memory    | 16 GB | 35% |
 | Storage   | Samsung EVO 860 1TB SATA | – |
 | OS        | Ubuntu 24.04 LTS | – |
-
 
 ## 🚀 Future Ideas
 
@@ -93,6 +93,17 @@ A quick overview of the main directories under `kubernetes/` and their purpose:
 | `apps/`           | Application definitions grouped per app. |
 | `bootstrap/`      | Scripts and instructions to bootstrap a cluster from this repo. |
 
+## 🔒 Sanitization
+
+To make this repository public, a few sensitive values are replaced with safe placeholders:
+
+- Domains → replaced with example.com
+
+- Emails → replaced with user@example.com
+
+- IPs → replaced with 198.51.100.x/24 (TEST-NET-2, for documentation)
+
+Other than these sanitizations, everything reflects the real production environment — including repository structure, manifests, and GitOps workflows.
 
 ## 📦 Deployment Notes  
 
@@ -104,7 +115,7 @@ This repository is not generic and cannot be deployed as-is, but it can be used 
 - Generate and configure your own [SOPS](https://github.com/getsops/sops) age key  
 - Review secrets, domains, IPs, and certificates configuration  
 
-For detailed steps on how this specific homelab configuration is bootstrapped, see the [bootstrap guide](./bootstrap/README.md).
+For detailed steps on how this specific homelab configuration is bootstrapped, see the [bootstrap guide](./kubernetes/bootstrap/README.md).
 
 ## 📄 License
 This project is licensed under the [MIT License](./LICENSE).

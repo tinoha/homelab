@@ -1,0 +1,87 @@
+name: Sanitize & Mirror (history rewrite)
+
+on:
+  push:
+    tags:
+      - public-*   # trigger on tags starting with 'public-'
+
+permissions:
+  contents: read
+
+jobs:
+  sanitize-and-push:
+    if: github.repository != 'tinoha/homelab'  # prevent running in public repo
+    runs-on: ubuntu-latest
+    env:
+      PUBLIC_REPO: git@github.com:tinoha/homelab.git  # public mirror repo
+      # SSH_KEY: ${{ secrets.SSH_KEY }}          # SSH key secret
+    steps:
+      - name: Checkout full repository (no depth)
+        uses: actions/checkout@v5
+        with:
+          ref: main        # checkout main branch only
+          fetch-depth: 0   # get full history for filtering
+
+      - name: Set up SSH for remote repo access
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+          
+
+      - name: Install git-filter-repo
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git python3
+          curl -L https://github.com/newren/git-filter-repo/raw/main/git-filter-repo > ~/git-filter-repo
+          chmod +x ~/git-filter-repo
+          sudo mv ~/git-filter-repo /usr/local/bin/
+          git --version
+          git filter-repo --version
+          python3 --version
+
+      - name: Create replacements file
+        run: |
+          echo "literal:${{ vars.REAL_LAN_IP_PREFIX }}==>${{ vars.SCRUB_LAN_IP_PREFIX }}" > replacements.txt
+          echo "literal:${{ vars.REAL_DOMAIN }}==>${{ vars.SCRUB_DOMAIN }}" >> replacements.txt
+          echo "literal:${{ vars.REAL_EMAIL }}==>${{ vars.SCRUB_EMAIL }}" >> replacements.txt
+          echo "literal:${{ vars.REAL_ORG_NAME }}==>${{ vars.SCRUB_ORG_NAME }}" >> replacements.txt
+
+      - name: Verify replacements file
+        run: |
+          echo "Replacements file created with $(wc -l < replacements.txt) lines."
+          cat replacements.txt
+
+      - name: Run git-filter-repo to replace text across history
+        env:
+          GIT_AUTHOR_NAME: github-actions
+          GIT_AUTHOR_EMAIL: actions@github.com
+        run: |
+          # Note: --force runs without fresh-clone check
+          git filter-repo --replace-text replacements.txt --force
+          echo "Git history sanitized."
+
+      - name: Clean leftover refs and gc
+        run: |
+          rm -rf .git/refs/original/
+          git reflog expire --expire=now --all || true
+          git gc --prune=now --aggressive || true
+
+      - name: Configure git user for push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+         
+      - name: Push sanitized history to public repo
+        run: |    
+          git remote add public ${{ env.PUBLIC_REPO }}  # Add public repo remote
+          # git push --force public main ${{ github.ref_name }}  # Push sanitized main branch and the triggered tag
+            git push --force public main --tags  # Push sanitized main branch and all tags 
+      - name: Verify public repo push
+        run: |
+          echo "Sanitized history pushed to public repo: ${{ env.PUBLIC_REPO }}"
+          echo "Verifying by fetching from public repo. If no errors or log lines are found, push was successful."
+          git fetch public main
+          git log --oneline main..public/main
