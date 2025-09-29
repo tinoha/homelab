@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - public-*   # trigger on tags starting with 'public-'
+      - test-*     # trigger on tags starting with 'test-'
 
 permissions:
   contents: read
@@ -75,11 +76,13 @@ jobs:
           git config user.email "actions@github.com"
          
       - name: Push sanitized history to public repo
+        if: startsWith(github.ref, 'refs/tags/public-')
         run: |    
           git remote add public ${{ env.PUBLIC_REPO }}  # Add public repo remote
-          # git push --force public main ${{ github.ref_name }}  # Push sanitized main branch and the triggered tag
-            git push --force public main --tags  # Push sanitized main branch and all tags 
+          git push --force public main         # Push sanitized main branch
+          git push public refs/tags/public-*   # Push only tags starting with 'public-'
       - name: Verify public repo push
+        if: startsWith(github.ref, 'refs/tags/public-')
         run: |
           echo "Sanitized history pushed to public repo: ${{ env.PUBLIC_REPO }}"
           echo "Verifying by fetching from public repo. If no errors or log lines are found, push was successful."
