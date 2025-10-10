@@ -11,6 +11,7 @@ Thumbs.db
 # Do not include private stuff
 /private
 /test
+/infra
 
 # Secret files are allowed, as they are encrypted with SOPS
 # **/secrets/*

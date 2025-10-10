@@ -9,4 +9,4 @@ resources:
 - omada-controller-svc.yaml
 - omada-route.yaml
 
-namespace: omada
+# namespace: omada

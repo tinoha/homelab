@@ -19,7 +19,7 @@ set -euo pipefail
 # Default values are set for my homelab repo. Adjust as needed below, or override by exporting env vars.
 ### --- Defaults
 : "${GITHUB_OWNER:=tinoha}"
-: "${GITHUB_REPO:=homeit}"
+: "${GITHUB_REPO:=homelab-internal}"
 : "${GITHUB_BRANCH:=main}"
 : "${GITHUB_PATH:=kubernetes/clusters/home-prod}"
 : "${GITHUB_PRIVATE:=true}"

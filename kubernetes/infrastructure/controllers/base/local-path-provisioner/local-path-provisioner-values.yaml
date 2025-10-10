@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: local-path-provisioner-values
+  namespace: local-path-storage
+data:
+  values.yaml: |
+    storageClass:
+      create: true
+      ## Set StorageClass as the default StorageClass
+      ## Ignored if storageClass.create is false
+      defaultClass: true
+      ## The default volume type this storage class creates, can be "local" or "hostPath"
+      defaultVolumeType: local
+      ## Set a StorageClass name
+      ## Ignored if storageClass.create is false
+      name: local-path
+      ## ReclaimPolicy field of the class, which can be either Delete or Retain
+      reclaimPolicy: Delete
+      ## volumeBindingMode field controls when volume binding and dynamic provisioning should occur, can be  "Immediate" or "WaitForFirstConsumer"
+      volumeBindingMode: WaitForFirstConsumer
+      ## Defauld volume type for the provisioner, can be "local" or "hostPath"
+      defaultVolumeType: local
+    nodePathMap:
+      - node: DEFAULT_PATH_FOR_NON_LISTED_NODES
+        paths:
+          -  /var/mnt/local-path
+
+    

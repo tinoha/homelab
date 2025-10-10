@@ -3,16 +3,16 @@
 
 # Remove volumeName from PVCs to allow dynamic binding to PVs based on storageClass.
 
-# apiVersion: builtin
-# kind: PatchTransformer
-# metadata:
-#   name: remove-volumeName-pvc
-# patch: |-
-#   - op: remove
-#     path: /spec/volumeName
-# target:
-#   kind: PersistentVolumeClaim
-#   labelSelector: "kustomize/app-pvc=true"
+apiVersion: builtin
+kind: PatchTransformer
+metadata:
+  name: remove-volumeName-pvc
+patch: |-
+  - op: remove
+    path: /spec/volumeName
+target:
+  kind: PersistentVolumeClaim
+  labelSelector: "kustomize/app-pvc=true"
 
 ---
 # Update storageClassName in PVCs to match current cluster storage class.
