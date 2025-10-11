@@ -3,5 +3,6 @@ kind: Kustomization
 
 resources:
   - external-secrets-ns.yaml # Namespace for External Secrets
+  - external-secrets-values.yaml # Values for External Secrets
   - external-secrets-helmrepository.yaml # external-secrets HelmRepository
   - external-secrets-helmrelease.yaml # external-secrets HelmRelease
