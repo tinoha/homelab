@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - kong-ns.yaml
+  - kong-helm-values.yaml
   - kong-helmrepository.yaml
   - kong-helmrelease.yaml
 

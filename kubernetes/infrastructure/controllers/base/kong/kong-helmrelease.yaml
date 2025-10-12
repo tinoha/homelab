@@ -18,8 +18,14 @@ spec:
         name: kong
         namespace: flux-system
       version: "~0.21.0"
-      valuesFiles:
-        - values.yaml
+  #    valuesFiles:
+  #      - values.yaml
+  
+  valuesFrom:
+    - kind: ConfigMap
+      name: kong-helm-values
+      valuesKey: values.yaml
+
   releaseName: kong
   interval: 6h0m0s
   # timeout: 10m0s
