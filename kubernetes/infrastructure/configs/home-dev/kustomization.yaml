@@ -7,10 +7,12 @@ resources:
   - ../base/external-secrets
   - ../base/cert-manager
   - ../base/gateway
+  - ../base/csi-driver-nfs
   
 patches:
   - path: patches/patch-proxy-certificate.yaml # Set domain names for the proxy certificate
   - path: patches/patch-metallb-ip-pool.yaml # Set IP address pool for MetalLB
+  - path: patches/patch-csi-nfs-storageclass.yaml # Set sNFS server and share
   - path: secrets/patch-azure-clustersecretstore.yaml # Patch azure clustersecretstore with correct tenantId and vaultUrl
 
 transformers:

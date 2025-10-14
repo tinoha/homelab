@@ -11,3 +11,4 @@ data:
       type: LoadBalancer
       annotations:
         metallb.universe.tf/address-pool: proxy-ip-pool  # Use the MetalLB address pool named "proxy-ip-pool"
+

@@ -1,0 +1,7 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-csi
+parameters:
+  server: 198.51.100.41
+  share: /k8s-home-prod
