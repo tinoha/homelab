@@ -4,4 +4,4 @@ metadata:
   name: nfs-csi
 parameters:
   server: 198.51.100.41
-  share: /k8s-home-prod
+  share: /k8s-home-dev

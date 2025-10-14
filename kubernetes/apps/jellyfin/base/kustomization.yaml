@@ -10,3 +10,9 @@ resources:
   - jellyfin-route.yaml
 
 namespace: jellyfin
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: jellyfin
+    includeSelectors: false
+    includeTemplates: true

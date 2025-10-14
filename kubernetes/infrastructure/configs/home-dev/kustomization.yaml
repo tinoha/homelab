@@ -8,6 +8,7 @@ resources:
   - ../base/cert-manager
   - ../base/gateway
   - ../base/csi-driver-nfs
+  - ../base/pvs/nfs-pvs # persistentVolumes for application NFS mounts
   
 patches:
   - path: patches/patch-proxy-certificate.yaml # Set domain names for the proxy certificate
@@ -17,6 +18,6 @@ patches:
 
 transformers:
   - transformers/cert-manager-email-transformer.yaml # Set email for cert-manager ClusterIssuers
-  - transformers/pv-labeler-transformer.yaml # Add label to all pvs to let pvc-update-transformer.yaml select them
-#  - transformers/pv-nodename-transformer.yaml # Set PV node affinity node names on PVs
+  # - transformers/pv-labeler-transformer.yaml # Add label to all pvs to let transformer to select them
+  # - transformers/pv-nodename-transformer.yaml # Set PV node affinity node names on PVs
 

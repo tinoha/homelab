@@ -19,7 +19,9 @@ images:
     newTag: latest  
   - name: docker.io/signalk/signalk-server
     newTag: latest
-  
+
+patches:
+  - path: patches/patch-jellyfin-media-pvc.yaml
 
 transformers:
   - transformers/pvc-labeler-transformer.yaml # Add label to all pvcs to let pvc-update-transformer.yaml select them

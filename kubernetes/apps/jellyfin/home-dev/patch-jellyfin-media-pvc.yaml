@@ -1,0 +1,11 @@
+# Media library from NFS share
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jellyfin-media-pvc
+  namespace: jellyfin
+spec:
+  storageClassName: nfs-csi
+  volumeName: media-library
+  accessModes:
+    - ReadOnlyMany
