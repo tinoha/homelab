@@ -14,8 +14,6 @@ spec:
         name: metallb
         namespace: flux-system
       version: "~0.15.2"
-      # valuesFiles:
-      #   - values.yaml
   releaseName: metallb
   interval: 6h0m0s
   # timeout: 10m0s

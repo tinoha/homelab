@@ -2,7 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ../base/pvs  # PersistentVolumes (local-path) for applications, adjust nodeNames in pv-nodename-transformer.yaml
+  # - ../base/pvs  # PersistentVolumes (local-path) for applications, adjust nodeNames in pv-nodename-transformer.yaml
   - ../base/metallb  # Set Metallb LoadBalancer IP addresss pool: apps-ip-pool 
   - ../base/external-secrets
   - ../base/cert-manager
@@ -19,6 +19,6 @@ patches:
 
 transformers:
   - transformers/cert-manager-email-transformer.yaml # Set email for cert-manager ClusterIssuers
-  - transformers/pv-labeler-transformer.yaml # Add label to all pvs to let pvc-update-transformer.yaml select them
-  - transformers/pv-nodename-transformer.yaml # Set PV node affinity node names on PVs
+  # - transformers/pv-labeler-transformer.yaml # Add label to all pvs to let pvc-update-transformer.yaml select them
+  # - transformers/pv-nodename-transformer.yaml # Set PV node affinity node names on PVs
 

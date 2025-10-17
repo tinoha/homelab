@@ -7,4 +7,9 @@ metadata:
 spec:
   addresses:
     - 192.0.2.10-192.0.2.19  # reserved TEST-NET-1 range, won't conflict  # placeholder, will be patched
-  autoAssign: false
+  autoAssign: true
+  serviceAllocation:
+    namespaces:
+      - kong
+    priority: 10 
+  

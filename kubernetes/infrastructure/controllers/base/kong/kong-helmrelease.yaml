@@ -18,9 +18,7 @@ spec:
         name: kong
         namespace: flux-system
       version: "~0.21.0"
-  #    valuesFiles:
-  #      - values.yaml
-  
+
   valuesFrom:
     - kind: ConfigMap
       name: kong-helm-values
@@ -41,7 +39,4 @@ spec:
     remediation:
       retries: 2
       remediateLastFailure: true
-  
-  # values:
-  #   crds:
-  #     enabled: true
+
