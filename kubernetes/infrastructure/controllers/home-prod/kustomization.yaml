@@ -7,4 +7,6 @@ resources:
   - ../base/external-secrets
   - ../base/cert-manager
   - ../base/kong
+  - ../base/csi-driver-nfs
+
   

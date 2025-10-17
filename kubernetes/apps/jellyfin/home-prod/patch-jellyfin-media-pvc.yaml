@@ -8,4 +8,6 @@ metadata:
     storage-type: static-nfs
 spec:
   storageClassName: nfs-csi
-  volumeName: media-library
+  volumeName: media-jellyfin
+  accessModes:
+    - ReadOnlyMany

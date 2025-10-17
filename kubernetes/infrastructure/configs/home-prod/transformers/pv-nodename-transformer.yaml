@@ -12,4 +12,6 @@ patch: |-
       - "k8s-prod-1"
 target:
   kind: PersistentVolume
-  labelSelector: "kustomize/app-pv=true"
+  labelSelector: | 
+    kustomize/app-pv=true,
+    storage-type notin (static-nfs)

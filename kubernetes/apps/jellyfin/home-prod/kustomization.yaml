@@ -11,3 +11,4 @@ patches:
       group: gateway.networking.k8s.io
       version: v1
     path: patch-jellyfin-route.yaml
+  - path: patch-jellyfin-media-pvc.yaml
