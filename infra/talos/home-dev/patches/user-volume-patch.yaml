@@ -1,0 +1,10 @@
+# user-volume.patch.yaml
+# Create volume for k8s local-path use
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: local-path
+provisioning:
+  diskSelector:
+    match: system_disk == false && disk.size < 20u * GiB
+  minSize: 10GB
+  maxSize: 50GB

@@ -1,0 +1,59 @@
+# This is a Talos configuration file.
+# This file is intended to be used as a patch to the common configuration file.
+
+# Provides machine specific configuration options.
+machine:
+  certSANs: # Subject Alternative Names for the machine's TLS cert.
+    - talos-prod-1.home.example.com
+  
+  kubelet:
+    nodeIP:
+      # The `validSubnets` field configures the networks to pick kubelet node IP from.
+      validSubnets:
+      - 198.51.100.0/24
+  
+  network:
+    hostname: talos-prod-1
+    interfaces:
+      # - interface: enp0s1 # The interface name.
+      - deviceSelector:
+          driver: "virtio_net"
+          # - deviceSelector:
+            #    driver: virtio_net # Pick a network device using the selector. should take any device with bus prefix 0*.
+        # Virtual IP address assigned to the interface for client access (optional).
+        # dhcp: false # Whether to use DHCP for this interface.     
+        # Assigns static IP addresses to the interface.
+        addresses:
+          - 198.51.100.10/24 # The machine's static IP address and CIDR prefix.
+           # A list of routes associated with the interface.
+        # Virtual IP address assigned to the interface for client access (optional).
+        routes:
+          - network: 0.0.0.0/0 # The route's network (destination).
+            gateway: 198.51.100.1 # The route's gateway (if empty, creates link scope route)
+    
+    nameservers:
+      - 1.1.1.1
+      - 1.0.0.1
+    
+    extraHostEntries: # Extra entries to add to /etc/hosts on all nodes.
+    - ip: 198.51.100.10
+      aliases:
+        - kube.home.example.com
+        - talos-prod-1.home.example.com
+  
+# Used to provide instructions for installations.
+  install:
+    disk: /dev/vda # The disk to install Talos onto.
+    # image: factory.talos.dev/metal-installer/7d4c31cbd96db9f90c874990697c523482b2bae27fb4631d5583dcd9c281b1ff:v1.11.3
+
+# Provides cluster specific configuration options.
+cluster:
+  # Allows running workload on control-plane nodes.
+  allowSchedulingOnControlPlanes: true
+  apiServer:
+    # Remove the PodSecurity admission controller to disable Pod Security Standards enforcement temporarily.
+    admissionControl:
+      - name: PodSecurity # Name is the name of the admission controller.
+        $patch: delete # Remove this line to enable admission controllers
+
+

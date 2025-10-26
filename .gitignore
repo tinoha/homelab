@@ -11,13 +11,13 @@ Thumbs.db
 # Do not include private stuff
 /private
 /test
-/infra
 
 # Secret files are allowed, as they are encrypted with SOPS
 # **/secrets/*
 
 # Allow template files for secrets to be committed
 !**/secrets/*.template
+!**/secrets/*.example
 
 # Ignore local Terraform/Ansible state if present
 *.tfstate
@@ -34,3 +34,9 @@ logs/
 *.tar
 *.img
 *.tmp
+
+# Ignore infra/talos secrets and configs..
+**/secrets/*
+**/configs/*
+!**/secrets/*.example
+!**/configs/*.example

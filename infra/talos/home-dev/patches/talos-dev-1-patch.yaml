@@ -1,0 +1,53 @@
+# This is a Talos configuration file.
+# This file is intended to be used as a patch to the common configuration file.
+
+# Provides machine specific configuration options.
+machine:
+  certSANs: # Subject Alternative Names for the machine's TLS cert.
+    - talos-dev-1.home.example.com
+  
+  kubelet:
+    nodeIP:
+      # The `validSubnets` field configures the networks to pick kubelet node IP from.
+      validSubnets:
+      - 198.51.100.0/24
+
+  network:
+    hostname: talos-dev-1
+    interfaces:
+      - deviceSelector:
+          driver: "virtio_net"
+              
+        # Assigns static IP addresses to the interface.
+        addresses:
+          - 198.51.100.31/24
+           # A list of routes associated with the interface.
+        routes:
+          - network: 0.0.0.0/0 # The route's network (destination).
+            gateway: 198.51.100.1 # The route's gateway (if empty, creates link scope route)
+    
+    nameservers:
+      - 1.1.1.1
+      - 1.0.0.1
+    
+    extraHostEntries: # Extra entries to add to /etc/hosts on all nodes.
+    - ip: 198.51.100.31
+      aliases:
+        - talos-dev-1.home.example.com
+        - kube-dev.home.example.com
+  
+# Used to provide instructions for installations.
+  install:
+    disk: /dev/sda # The disk to install Talos onto.
+
+# Provides cluster specific configuration options.
+cluster:
+  # API server specific configuration options.
+  apiServer:
+    # Remove the PodSecurity admission controller to disable Pod Security Standards enforcement temporarily.
+    admissionControl:
+      - name: PodSecurity # Name is the name of the admission controller.
+        $patch: delete # Remove this line to enable admission controllers
+
+  # Allows running workload on control-plane nodes.
+  allowSchedulingOnControlPlanes: true
