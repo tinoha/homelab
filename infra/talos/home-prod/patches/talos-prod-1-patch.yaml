@@ -44,8 +44,7 @@ machine:
 # Used to provide instructions for installations.
   install:
     disk: /dev/vda # The disk to install Talos onto.
-    # image: factory.talos.dev/metal-installer/7d4c31cbd96db9f90c874990697c523482b2bae27fb4631d5583dcd9c281b1ff:v1.11.3
-
+    image: factory.talos.dev/metal-installer/7d4c31cbd96db9f90c874990697c523482b2bae27fb4631d5583dcd9c281b1ff:v1.11.3
 # Provides cluster specific configuration options.
 cluster:
   # Allows running workload on control-plane nodes.

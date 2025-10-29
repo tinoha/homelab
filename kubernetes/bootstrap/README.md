@@ -69,9 +69,10 @@ tenantId and vaultUrl. These variable are loaded later from the cluster-specific
 
 ## Step 4: Bootrap the Cluster with flux
 Ensure your `kubectl config`  points to the correct Kubernetes cluster.
-```
+```bash
 kubectl config get-contexts
 kubectl get nodes
+```
 
 Finally, run the script to initialize Flux and cluster
 ```bash

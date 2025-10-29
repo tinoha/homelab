@@ -102,6 +102,7 @@ A quick overview of the main directories and their purpose:
 |----------------|-----------------------------------------------------  |
 | `talos/`       | Talos clusters setup for environments like `home-prod` and `home-dev`. |
 
+<a id="sanitization"></a>
 ## 🔒 Sanitization
 
 To make this repository public, a few sensitive values are replaced with safe placeholders:
@@ -114,6 +115,7 @@ To make this repository public, a few sensitive values are replaced with safe pl
 
 Other than these sanitizations, everything reflects the real production environment — including repository structure, manifests, and GitOps workflows.
 
+<a id="deployment-notes"></a>
 ## 📦 Deployment Notes
 
 This repository is **environment-specific** and cannot be deployed as-is, but it can serve as a reference for building a homelab or GitOps-managed Kubernetes environment. Before using it as a base, review and customize the following components:
