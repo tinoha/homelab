@@ -5,7 +5,7 @@ resources:
 - omada-controller-ns.yaml
 # - omada-controller-pv.yaml
 - omada-controller-pvc.yaml
-- omada-controller-statefulset.yaml
+- omada-controller-deployment.yaml
 - omada-controller-svc.yaml
 - omada-route.yaml
 

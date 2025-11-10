@@ -4,7 +4,7 @@ metadata:
   name: omada-data
 spec:
   accessModes:
-    - ReadWriteOncePod
+    - ReadWriteOnce
   capacity:
     storage: 8Gi
   local:
@@ -19,7 +19,6 @@ spec:
                 - k8s-prod-1
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-path
-  volumeMode: Filesystem
 
 ---
 apiVersion: v1
@@ -28,7 +27,7 @@ metadata:
   name: omada-logs
 spec:
   accessModes:
-    - ReadWriteOncePod
+    - ReadWriteOnce
   capacity:
     storage: 4Gi
   local:
@@ -44,4 +43,4 @@ spec:
 
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-path
-  volumeMode: Filesystem
+

@@ -10,7 +10,7 @@ resources:
 
 images:
   - name: docker.io/tihal/omada-controller
-    newTag: "5.15.24.18"
+    newTag: "6.0.0.24"
   - name: docker.io/jellyfin/jellyfin
     newTag: "10.10.7"
   - name: docker.io/pihole/pihole
