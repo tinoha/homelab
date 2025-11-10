@@ -63,7 +63,7 @@ spec:
             - containerPort: 29813
             - containerPort: 29814
             - containerPort: 29815
-            - containerPort: 29816
+            - containerPort: 29817
           securityContext:
             runAsUser: 550
             runAsGroup: 550
