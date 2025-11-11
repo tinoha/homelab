@@ -36,7 +36,7 @@ logs/
 *.tmp
 
 # Ignore infra/talos secrets and configs..
-**/secrets/*
-**/configs/*
-!**/secrets/*.example
-!**/configs/*.example
+# **/secrets/*
+# **/configs/*
+# !**/secrets/*.example
+# !**/configs/*.example

@@ -1,0 +1,5 @@
+# Ignore infra/talos secrets and configs..
+**/secrets/*
+**/configs/*
+!**/secrets/*.example
+!**/configs/*.example

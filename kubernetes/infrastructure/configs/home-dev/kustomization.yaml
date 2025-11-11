@@ -2,13 +2,12 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  # - ../base/pvs  # PersistentVolumes (local-path) for applications, adjust nodeNames in pv-nodename-transformer.yaml
+  - ../base/pvs      # PersistentVolumes for applications, adjust nodeNames in pv-nodename-transformer.yaml
   - ../base/metallb  # LoadBalancer implementation for bare-metal clusters
   - ../base/external-secrets
   - ../base/cert-manager
   - ../base/gateway
   - ../base/csi-driver-nfs
-  - ../base/pvs/nfs-pvs # persistentVolumes for application NFS mounts
   
 patches:
   - path: patches/patch-proxy-certificate.yaml # Set domain names for the proxy certificate

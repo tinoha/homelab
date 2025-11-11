@@ -9,7 +9,9 @@ patch: |-
   - op: replace
     path: /spec/nodeAffinity/required/nodeSelectorTerms/0/matchExpressions/0/values #/0
     value: 
-      - "k8s-node-1"
+      - "talos-dev-1"
 target:
   kind: PersistentVolume
-  labelSelector: "kustomize/app-pv=true"
+  labelSelector: |
+    kustomize/app-pv=true,
+    storage-type notin (static-nfs)

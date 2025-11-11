@@ -5,7 +5,7 @@ metadata:
     pv.kubernetes.io/provisioned-by: nfs.csi.k8s.io
   labels:
     storage-type: static-nfs
-  name: media-library
+  name: media-jellyfin
 spec:
   capacity:
     storage: 10Gi
@@ -24,4 +24,3 @@ spec:
     volumeAttributes:
       server: 198.51.100.41
       share: /media
-
