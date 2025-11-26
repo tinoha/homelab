@@ -1,0 +1,20 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: authentik-db
+  namespace: authentik
+spec:
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.1-minimal-trixie
+  
+  bootstrap:
+    initdb:
+      dataChecksums: true
+      database: authentik
+      owner: authentik
+      secret:
+        name: authentik-db-credentials
+
+  storage:
+    size: 4Gi
+    storageClass: local-path

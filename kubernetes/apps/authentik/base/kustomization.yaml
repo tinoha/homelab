@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - authentik-ns.yaml
+  - authentik-db-credentials-externalsecret.yaml
+  - authentik-secret-key-externalsecret.yaml
+  - authentik-db-cluster.yaml # Postgress database for Authentik by cloudnative-pg
+  - authentik-helmrepository.yaml
+  - authentik-helm-values-cm.yaml
+  - authentik-helmrelease.yaml
+  - authentik-route.yaml

@@ -1,0 +1,5 @@
+# Patch to update hostnames for omada route 
+- op: replace
+  path: /spec/hostnames
+  value: 
+    - authentik.dev.example.com

@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: authentik-helm-values
+  namespace: authentik
+data:
+  values.yaml: |
+    global:
+      revisionHistoryLimit: 3
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
+
+    authentik:
+      secret_key: file:///secrets/secret_key
+      postgresql:
+        host: authentik-db-rw
+        user: file:///postgres-creds/username
+        password: file:///postgres-creds/password
+
+    server:
+    # -- authentik server container-level security context
+      # @default -- See [values.yaml]
+      containerSecurityContext:
+        # Not all of the following has been tested. Use at your own risk.
+        runAsNonRoot: true
+        # readOnlyRootFilesystem: true
+        allowPrivilegeEscalation: false
+        # seccomProfile:
+        #   type: RuntimeDefault
+        capabilities:
+          drop:
+            - ALL
+      volumes:
+        - name: postgres-creds
+          secret:
+            secretName: authentik-db-credentials
+        - name: secret-key
+          secret:
+            secretName: authentik-secret-key
+      volumeMounts:
+        - name: postgres-creds
+          mountPath: /postgres-creds
+          readOnly: true
+        - name: secret-key
+          mountPath: /secrets
+          readOnly: true
+      service:
+        # -- authentik server service annotations
+        annotations:
+          konghq.com/protocol: "https"  # use https for internal traffic (kong-traffik)
+          konghq.com/verify: "false"    # disable TLS verification (for self-signed certs)
+
+    worker:
+      # -- authentik worker container-level security context
+      # @default -- See [values.yaml]
+      containerSecurityContext:
+        # Not all of the following has been tested. Use at your own risk.
+        runAsNonRoot: true
+        # readOnlyRootFilesystem: true
+        allowPrivilegeEscalation: false
+        # seccomProfile:
+        #   type: RuntimeDefault
+        capabilities:
+          drop:
+            - ALL
+      volumes:
+        - name: postgres-creds
+          secret:
+            secretName: authentik-db-credentials
+        - name: secret-key
+          secret:
+            secretName: authentik-secret-key
+      volumeMounts:
+        - name: postgres-creds
+          mountPath: /postgres-creds
+          readOnly: true
+        - name: secret-key
+          mountPath: /secrets
+          readOnly: true
+
+    postgresql:
+      enabled: false

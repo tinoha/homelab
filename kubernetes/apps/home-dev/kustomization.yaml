@@ -6,6 +6,7 @@ resources:
   - ../jellyfin/home-dev
   - ../omada-controller/home-dev
   - ../pihole/home-dev
+  - ../authentik/home-dev
   - ../signalk/home-dev
 
 images:

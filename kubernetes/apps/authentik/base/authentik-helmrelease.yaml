@@ -1,0 +1,39 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: authentik
+  namespace: authentik
+spec:
+  releaseName: authentik
+  targetNamespace: authentik
+  interval: 6h0m0s
+  # maxHistory: 5
+  chart:
+    spec:
+      chart: authentik
+      reconcileStrategy: ChartVersion
+      version: "~2025.10" # Pin to a minor version for stability
+      sourceRef:
+        kind: HelmRepository
+        name: authentik
+        namespace: flux-system
+  # timeout: 10m0s
+  
+  valuesFrom:
+    - kind: ConfigMap
+      name: authentik-helm-values # Matches the ConfigMap above
+      valuesKey: values.yaml
+  
+  install:
+    createNamespace: true
+    crds: CreateReplace
+    remediation:
+      retries: 2
+      remediateLastFailure: true
+
+  upgrade:
+    remediation:
+      retries: 2
+      remediateLastFailure: true
+  

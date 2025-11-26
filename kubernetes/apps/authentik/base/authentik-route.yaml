@@ -1,0 +1,22 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: authentik
+  namespace: authentik
+  labels:
+    app: authentik
+  annotations:
+    konghq.com/protocols: https # Redirect always to https
+    konghq.com/https-redirect-status-code: "301"
+spec:
+  parentRefs:
+    - name: kong
+      namespace: gateway
+  hostnames:
+    - authentik.example.com
+  rules:
+    - matches:
+      backendRefs:
+        - name: authentik-server
+          kind: Service
+          port: 443
