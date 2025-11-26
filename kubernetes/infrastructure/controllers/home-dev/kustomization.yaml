@@ -9,4 +9,6 @@ resources:
   - ../base/cert-manager
   - ../base/kong
   - ../base/csi-driver-nfs
+  - ../base/cloudnative-pg
+
   
