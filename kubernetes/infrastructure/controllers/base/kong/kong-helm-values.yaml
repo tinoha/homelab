@@ -7,8 +7,9 @@ data:
   values.yaml: |
     crds:
       enabled: true
-    proxy:
-      type: LoadBalancer
-      annotations:
-        metallb.universe.tf/address-pool: proxy-ip-pool  # Use the MetalLB address pool named "proxy-ip-pool"
-
+    gateway:
+      proxy:
+        type: LoadBalancer
+        externalTrafficPolicy: Local
+        annotations:
+          metallb.universe.tf/address-pool: proxy-ip-pool  # Use the MetalLB address pool named "proxy-ip-pool"
