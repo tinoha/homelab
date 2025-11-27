@@ -22,6 +22,11 @@ data:
             description: TP-Link Omada Software Controller
             icon: omada.png
             siteMonitor: https://omada-controller.omada.svc.cluster.local
+        - Authentik:
+            href: https://authentik.dev.example.com
+            description: authentik is an IdP (Identity Provider) and SSO (Single Sign On) platform
+            icon: authentik.png
+            siteMonitor: http://authentik-server.authentik.svc.cluster.local:80/-/health/live/
 
     - Experimental:
         - Signalk:
