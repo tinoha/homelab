@@ -23,7 +23,7 @@ data:
              icon: omada.png
              siteMonitor: https://omada-controller.omada.svc.cluster.local
         - Authentik:
-            href: https://authentik.home.example.com
+            href: https://auth.example.com
             description: authentik is an IdP (Identity Provider) and SSO (Single Sign On) platform
             icon: authentik.png
             siteMonitor: http://authentik-server.authentik.svc.cluster.local:80/-/health/live/

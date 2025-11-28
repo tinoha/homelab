@@ -2,4 +2,4 @@
 - op: replace
   path: /spec/hostnames
   value: 
-    - authentik.home.example.com
+    - auth.example.com

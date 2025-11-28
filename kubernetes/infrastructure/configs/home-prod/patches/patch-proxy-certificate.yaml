@@ -10,6 +10,7 @@ spec:
   dnsNames:
     - home.example.com
     - "*.home.example.com"
+    - auth.example.com
   # Issuer references are always required.
   issuerRef:
     name: letsencrypt-prod
