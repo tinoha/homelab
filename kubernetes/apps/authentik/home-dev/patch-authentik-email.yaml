@@ -1,0 +1,12 @@
+# Patch email sender
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: authentik
+  namespace: authentik
+spec:
+  values:
+    authentik:
+      email:
+        from: "authentik@dev.example.com"

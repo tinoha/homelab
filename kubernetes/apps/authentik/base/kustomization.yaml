@@ -5,6 +5,7 @@ resources:
   - authentik-ns.yaml
   - authentik-db-credentials-externalsecret.yaml
   - authentik-secret-key-externalsecret.yaml
+  - authentik-smtp-credentials-externalsecret.yaml
   - authentik-db-cluster.yaml # Postgress database for Authentik by cloudnative-pg
   - authentik-helmrepository.yaml
   - authentik-helm-values-cm.yaml

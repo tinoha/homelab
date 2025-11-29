@@ -12,74 +12,81 @@ data:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: "OnRootMismatch"
+      
+      # Shared Environment Variables
+      # These will apply to both Server and Worker automatically.
+      env:
+        # 1. SMTP Credentials
+        - name: AUTHENTIK_EMAIL__USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: authentik-smtp-credentials
+              key: username
+        - name: AUTHENTIK_EMAIL__PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: authentik-smtp-credentials
+              key: password
+        
+        # 2. Database Credentials
+        - name: AUTHENTIK_POSTGRESQL__USER
+          valueFrom:
+            secretKeyRef:
+              name: authentik-db-credentials
+              key: username
+        - name: AUTHENTIK_POSTGRESQL__PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: authentik-db-credentials
+              key: password
+        
+        # 3. Secret Key
+        - name: AUTHENTIK_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: authentik-secret-key
+              key: secret_key
 
     authentik:
-      secret_key: file:///secrets/secret_key
+      # secret_key: ""  # set in global.env above
+      
       postgresql:
         host: authentik-db-rw
-        user: file:///postgres-creds/username
-        password: file:///postgres-creds/password
+        # user: ""      # set in global.env above
+        # password: ""  # set in global.env above
+      
+      email:
+        host: "mail-eu.smtp2go.com"
+        port: 2525
+        use_tls: true
+        use_ssl: false
+        timeout: 30
+        from: "authentik@example.com"
+        # username: ""  # set in global.env above
+        # password: ""  # set in global.env above
 
     server:
-    # -- authentik server container-level security context
-      # @default -- See [values.yaml]
+      # -- authentik server container-level security context
       containerSecurityContext:
-        # Not all of the following has been tested. Use at your own risk.
         runAsNonRoot: true
-        # readOnlyRootFilesystem: true
         allowPrivilegeEscalation: false
-        # seccomProfile:
-        #   type: RuntimeDefault
         capabilities:
           drop:
             - ALL
-      volumes:
-        - name: postgres-creds
-          secret:
-            secretName: authentik-db-credentials
-        - name: secret-key
-          secret:
-            secretName: authentik-secret-key
-      volumeMounts:
-        - name: postgres-creds
-          mountPath: /postgres-creds
-          readOnly: true
-        - name: secret-key
-          mountPath: /secrets
-          readOnly: true
+
       service:
-        # -- authentik server service annotations
         annotations:
-          konghq.com/protocol: "https"  # use https for internal traffic (kong-traffik)
-          konghq.com/verify: "false"    # disable TLS verification (for self-signed certs)
+          konghq.com/protocol: "https"
+          konghq.com/verify: "false"
 
     worker:
       # -- authentik worker container-level security context
-      # @default -- See [values.yaml]
       containerSecurityContext:
-        # Not all of the following has been tested. Use at your own risk.
         runAsNonRoot: true
-        # readOnlyRootFilesystem: true
         allowPrivilegeEscalation: false
-        # seccomProfile:
-        #   type: RuntimeDefault
         capabilities:
           drop:
             - ALL
-      volumes:
-        - name: postgres-creds
-          secret:
-            secretName: authentik-db-credentials
-        - name: secret-key
-          secret:
-            secretName: authentik-secret-key
-      volumeMounts:
-        - name: postgres-creds
-          mountPath: /postgres-creds
-          readOnly: true
-        - name: secret-key
-          mountPath: /secrets
-          readOnly: true
 
     postgresql:
       enabled: false

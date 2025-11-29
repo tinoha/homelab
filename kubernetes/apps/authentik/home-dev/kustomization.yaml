@@ -12,3 +12,4 @@ patches:
       group: gateway.networking.k8s.io
       version: v1
     path: patch-authentik-route.yaml
+  - path: patch-authentik-email.yaml
