@@ -1,5 +1,6 @@
-# Patch to update hostnames for omada route 
+# Patch to replace route hostnames 
 - op: replace
   path: /spec/hostnames
   value: 
     - auth.example.com
+    - omada.home.example.com   # Application routed to Authentik proxy (embedded outpost)

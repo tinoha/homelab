@@ -5,13 +5,24 @@ resources:
   - ../base
 
 patches:
-  - target:
+  # ---------------------------------------------------------------------------
+  # ROUTE DELETION: Authentik Proxy Mode
+  # In Production, Omada is protected by Authentik's "Proxy Provider" (Gatekeeper).
+  # Traffic is routed to Authentik first via a centralized route in the 'authentik'
+  # namespace (see: apps/authentik/atuhentik-proxy-route.yaml).
+  #
+  # Here we need delete the default HTTPRoute from the base to prevent it from
+  # bypassing authentication or causing routing conflicts.
+  # --------------------------------------------------------------------------- 
+  - patch: |-
+      apiVersion: gateway.networking.k8s.io/v1
       kind: HTTPRoute
-      name: omada
-      namespace: omada
-      group: gateway.networking.k8s.io
-      version: v1
-    path: patch-omada-route.yaml
+      metadata:
+        name: omada
+        namespace: omada
+      $patch: delete
+  
+  # Set the specific LoadBalancer IP for the Omada Controller service.
   - target:
       kind: Service
       name: omada-controller
@@ -20,3 +31,17 @@ patches:
       version: v1
     path: patch-omada-svc-lbip.yaml
   
+  # ---------------------------------------------------------------------------
+  # LEGACY / ROLLBACK CONFIGURATION
+  # ---------------------------------------------------------------------------
+  # This patch is kept for historical reference and rollback.
+  # Uncommenting this (and removing the delete patch above) would restore
+  # direct access to Omada, bypassing Authentik.
+  #
+  # - target:
+  #     kind: HTTPRoute
+  #     name: omada
+  #     namespace: omada
+  #     group: gateway.networking.k8s.io
+  #     version: v1
+  #   path: patch-omada-route.yaml
