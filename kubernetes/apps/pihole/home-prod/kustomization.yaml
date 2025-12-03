@@ -8,13 +8,39 @@ resources:
 namespace: pihole
 
 patches:
-  - target:
+  # ---------------------------------------------------------------------------
+  # ROUTE DELETION: Authentik Proxy Mode
+  # In Production, Omada is protected by Authentik's "Proxy Provider" (Gatekeeper).
+  # Traffic is routed to Authentik first via a centralized route in the 'authentik'
+  # namespace (see: apps/authentik/atuhentik-proxy-route.yaml).
+  #
+  # Here we need delete the default HTTPRoute from the base to prevent it from
+  # bypassing authentication or causing routing conflicts.
+  # --------------------------------------------------------------------------- 
+  - patch: |-
+      apiVersion: gateway.networking.k8s.io/v1
       kind: HTTPRoute
-      name: pihole
-      namespace: pihole
-      group: gateway.networking.k8s.io
-      version: v1
-    path: patches/patch-pihole-route.yaml
+      metadata:
+        name: pihole
+        namespace: pihole
+      $patch: delete
+    
+  # ---------------------------------------------------------------------------
+  # LEGACY / ROLLBACK CONFIGURATION
+  # ---------------------------------------------------------------------------
+  # This patch is kept for historical reference and rollback.
+  # Uncommenting this (and removing the delete patch above) would restore
+  # direct access to Omada, bypassing Authentik.
+  # - target:
+  #     kind: HTTPRoute
+  #     name: pihole
+  #     namespace: pihole
+  #     group: gateway.networking.k8s.io
+  #     version: v1
+  #  path: patches/patch-pihole-route.yaml
+  # -----------------------------------------------------------------------------
+
+  # Set the specific LoadBalancer IP for the Pihole instance
   - target:
       kind: Service
       name: pihole
@@ -22,6 +48,8 @@ patches:
       group: ""
       version: v1
     path: patches/patch-pihole-svc-lbip.yaml
+  
+  # Set domain name for Pihole FTL
   - target:
       kind: ConfigMap
       name: pihole-cm

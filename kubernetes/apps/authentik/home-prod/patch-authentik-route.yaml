@@ -1,6 +1,7 @@
-# Patch to replace route hostnames 
+# Patch to replace route hostnames
 - op: replace
   path: /spec/hostnames
   value: 
-    - auth.example.com
-    - omada.home.example.com   # Application routed to Authentik proxy (embedded outpost)
+    - auth.example.com         # Route to Authentik itself
+    - omada.home.example.com   # Traffic routed to Authentik Embedded Outpost (Proxy Mode).
+    - pihole.home.example.com  # Traffic routed to Authentik Embedded Outpost (Proxy Mode).
