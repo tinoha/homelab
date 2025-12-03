@@ -122,6 +122,7 @@ This repository is **environment-specific** and cannot be deployed as-is, but it
 - Provide your own [Azure Key Vault](https://azure.microsoft.com/en-us/services/key-vault/) and configure credentials
 - Provide a valid Cloudflare API token for certificate management
 - Generate and configure your own [SOPS](https://github.com/getsops/sops) age key
+- Configure or bypass the Authentik identity layer, which enforces authentication on various exposed services
 - Review and adapt secrets, domain names, IP addresses, and certificate configuration
 
 For detailed steps on how **this specific environment** is provisioned and bootstrapped, see:
