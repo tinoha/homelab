@@ -13,11 +13,11 @@ images:
   - name: docker.io/tihal/omada-controller
     newTag: "6.0.0.25"
   - name: docker.io/jellyfin/jellyfin
-    newTag: "10.10.7"
+    newTag: "10.11.5"
   - name: docker.io/pihole/pihole
-    newTag: "2025.08.0"
+    newTag: "2025.11.1"
   - name: ghcr.io/gethomepage/homepage
-    newTag: latest  
+    newTag: latest
   - name: docker.io/signalk/signalk-server
     newTag: latest
 
