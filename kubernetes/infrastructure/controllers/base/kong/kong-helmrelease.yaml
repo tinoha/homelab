@@ -17,7 +17,7 @@ spec:
         kind: HelmRepository
         name: kong
         namespace: flux-system
-      version: "~0.21.0"
+      version: "~0.22.0"
 
   valuesFrom:
     - kind: ConfigMap
