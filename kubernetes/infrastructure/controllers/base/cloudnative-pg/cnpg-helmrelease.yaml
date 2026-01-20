@@ -12,7 +12,7 @@ spec:
     spec:
       chart: cloudnative-pg
       reconcileStrategy: ChartVersion
-      version: "~0.26.1" # Pin to a minor version for stability
+      version: "~0.27.0" # Pin to a minor version for stability
       sourceRef:
         kind: HelmRepository
         name: cloudnative-pg
