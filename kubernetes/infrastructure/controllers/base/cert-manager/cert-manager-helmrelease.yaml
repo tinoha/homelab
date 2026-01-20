@@ -13,7 +13,7 @@ spec:
         kind: HelmRepository
         name: jetstack
         namespace: flux-system
-      version: "v1.18.2"
+      version: "v1.19.2"
   releaseName: cert-manager
   interval: 6h0m0s
   # timeout: 10m0s
