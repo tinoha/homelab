@@ -1,0 +1,16 @@
+# This file contains version information for Talos Linux, Kubernetes, and related components used in the home development environment. It serves as a reference for maintaining consistency across configurations and ensuring compatibility during upgrades.
+talosVersion: v1.12.5
+talosConfigVersion: v1.12.5
+kubernetesVersion: v1.34.5
+schematicId: 7d4c31cbd96db9f90c874990697c523482b2bae27fb4631d5583dcd9c281b1ff
+installerImageRepository: factory.talos.dev/metal-installer
+
+# To construct the full installer image name, use following format:
+# INSTALLER_IMAGE="${INSTALLER_IMAGE_REPOSITORY}/${SCHEMATIC_ID}:${TALOS_VERSION}"
+
+## Upgrade command examples. Adjust as needed, and be sure to check official Talos docs for the latest upgrade procedures and supported versions. 
+# Talos Linux ->v1.12.5
+# talosctl upgrade --nodes <ip> -e <ip> --image factory.talos.dev/metal-installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.12.5
+
+# Kubernetes ->v1.34.5
+# talosctl --nodes <ip> upgrade-k8s --to 1.34.5 [--dry-run]
