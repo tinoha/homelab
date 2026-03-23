@@ -12,30 +12,6 @@ machine:
       validSubnets:
       - 198.51.100.0/24
 
-  network:
-    hostname: talos-dev-1
-    interfaces:
-      - deviceSelector:
-          driver: "virtio_net"
-              
-        # Assigns static IP addresses to the interface.
-        addresses:
-          - 198.51.100.31/24
-           # A list of routes associated with the interface.
-        routes:
-          - network: 0.0.0.0/0 # The route's network (destination).
-            gateway: 198.51.100.1 # The route's gateway (if empty, creates link scope route)
-    
-    nameservers:
-      - 1.1.1.1
-      - 1.0.0.1
-    
-    extraHostEntries: # Extra entries to add to /etc/hosts on all nodes.
-    - ip: 198.51.100.31
-      aliases:
-        - talos-dev-1.home.example.com
-        - kube-dev.home.example.com
-  
 # Used to provide instructions for installations.
   install:
     disk: /dev/sda # The disk to install Talos onto.
@@ -44,10 +20,68 @@ machine:
 cluster:
   # API server specific configuration options.
   apiServer:
-    # Remove the PodSecurity admission controller to disable Pod Security Standards enforcement temporarily.
     admissionControl:
-      - name: PodSecurity # Name is the name of the admission controller.
-        $patch: delete # Remove this line to enable admission controllers
+      - name: PodSecurity
+        configuration:
+          defaults:
+            enforce: privileged   # previously "baseline", now "privileged" to allow running workloads with elevated privileges.
 
   # Allows running workload on control-plane nodes.
   allowSchedulingOnControlPlanes: true
+
+## Configure networking for the node.
+# Configure hostname
+---  
+apiVersion: v1alpha1
+kind: HostnameConfig
+hostname: talos-dev-1
+auto: off
+---
+
+# Create alias for the network interface Works only when single interface is present.
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: net0
+selector:
+    match: true # as there is a single link only, we can match it this way
+---
+
+# Configure static IP address for the host
+apiVersion: v1alpha1
+kind: LinkConfig
+name: net0
+addresses:
+    - address: 198.51.100.31/24
+routes:
+    - gateway: 198.51.100.1
+---
+
+# Configure DNS for the node
+apiVersion: v1alpha1
+kind: ResolverConfig
+nameservers:
+    - address: 1.1.1.1
+    - address: 1.0.0.1
+# searchDomains: # optional
+#    domains:
+#        - example.org
+#        - example.com
+#    disableDefault: false
+---
+
+# Configure timesync for the node
+apiVersion: v1alpha1
+kind: TimeSyncConfig
+ntp:
+    servers:
+        - time.cloudflare.com
+---
+
+# Set static host entries for the node (/etc/hosts)
+apiVersion: v1alpha1
+kind: StaticHostConfig
+name: 198.51.100.31 # IP address (IPv4 or IPv6) to map the hostnames to.
+# List of hostnames to map to the IP address.
+hostnames:
+    - talos-dev-1.home.example.com
+    - kube-dev.home.example.com
