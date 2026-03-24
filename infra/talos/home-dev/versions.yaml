@@ -1,9 +1,11 @@
-# This file contains version information for Talos Linux, Kubernetes, and related components used in the home development environment. It serves as a reference for maintaining consistency across configurations and ensuring compatibility during upgrades.
+# This file contains config version information for Talos Linux, Kubernetes, and related components used in the environment.
 talosVersion: v1.12.5
 talosConfigVersion: v1.12.5
 kubernetesVersion: v1.34.5
 schematicId: 376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba
 installerImageRepository: factory.talos.dev/metal-installer
+clusterName: home-dev-cl
+clusterEndpoint: https://kube-dev.home.example.com:6443
 
 # To construct the full installer image name, use following format:
 # INSTALLER_IMAGE="${INSTALLER_IMAGE_REPOSITORY}/${SCHEMATIC_ID}:${TALOS_VERSION}"
