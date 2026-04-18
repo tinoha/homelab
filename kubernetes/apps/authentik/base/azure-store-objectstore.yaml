@@ -1,0 +1,16 @@
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: azure-store
+  namespace: authentik
+spec:
+  configuration:
+    azureCredentials:
+      inheritFromAzureAD: false
+      useDefaultAzureCredentials: false
+    data:
+      compression: gzip
+    destinationPath: "https://<your-azure-storage-account>.blob.core.windows.net/<your-container-name>"
+    wal:
+      compression: gzip
+  retentionPolicy: 7d

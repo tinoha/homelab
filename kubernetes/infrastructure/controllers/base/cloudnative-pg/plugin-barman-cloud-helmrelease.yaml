@@ -1,0 +1,36 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: plugin-barman-cloud
+  namespace: cnpg-system
+spec:
+  releaseName: plugin-barman-cloud
+  targetNamespace: cnpg-system
+  interval: 6h0m0s
+  chart:
+    spec:
+      chart: plugin-barman-cloud
+      reconcileStrategy: ChartVersion
+      version: "~0.6.0" # Pin to a minor version for stability
+      sourceRef:
+        kind: HelmRepository
+        name: cloudnative-pg
+        namespace: flux-system
+  # timeout: 10m0s
+  
+  values:
+    replicaCount: 1
+
+  install:
+    createNamespace: true
+    crds: CreateReplace
+    remediation:
+      retries: 2
+      remediateLastFailure: true
+
+  upgrade:
+    remediation:
+      retries: 2
+      remediateLastFailure: true
+  

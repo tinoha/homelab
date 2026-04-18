@@ -11,3 +11,7 @@ resources:
   - authentik-helm-values-cm.yaml
   - authentik-helmrelease.yaml
   - authentik-route.yaml
+  - azure-store-credentials-externalsecret.yaml # ExternalSecret for Azure Blob Storage credentials
+  - azure-store-objectstore.yaml # ObjectStore for Azure Blob Storage used by PostgreSQL backup plugin
+  # - authentik-db-schedule-backup.yaml # ScheduledBackup for PostgreSQL database backup
+ 

@@ -5,4 +5,5 @@ resources:
   - cnpg-ns.yaml
   - cnpg-helmrepository.yaml
   - cnpg-helmrelease.yaml
+  - plugin-barman-cloud-helmrelease.yaml # HelmRelease for Barman Cloud plugin for PostgreSQL backups
   

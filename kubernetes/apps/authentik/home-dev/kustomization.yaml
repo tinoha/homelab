@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../base
+  - authentik-db-schedule-backup.yaml # ScheduledBackup for PostgreSQL database backup
 
 patches:
   - target:
@@ -11,5 +12,7 @@ patches:
       namespace: authentik
       group: gateway.networking.k8s.io
       version: v1
-    path: patch-authentik-route.yaml
-  - path: patch-authentik-email.yaml
+    path: patches/patch-authentik-route.yaml
+  - path: patches/patch-authentik-email.yaml
+  - path: secrets/patch-azure-store-url.yaml
+  - path: patches/patch-authentik-db-cluster-for-backup.yaml
