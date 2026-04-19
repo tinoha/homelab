@@ -1,0 +1,35 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: authentik-db
+  namespace: authentik
+spec:
+  postgresql:
+      parameters:
+        archive_timeout: "86400s" # archive every 24 hours
+  # The plugin sidecar needs these variables to authenticate
+  env:
+    - name: AZURE_CLIENT_ID
+      valueFrom:
+        secretKeyRef:
+          name: azure-store-credentials
+          key: client-id
+    - name: AZURE_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: azure-store-credentials
+          key: client-secret
+    - name: AZURE_TENANT_ID
+      valueFrom:
+        secretKeyRef:
+          name: azure-store-credentials
+          key: tenant-id
+
+  # Activate the Barman Cloud Plugin
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: "azure-store"
+        serverName: "authentik-db" # Used to identify the cluster in the backup destination.
+ 
