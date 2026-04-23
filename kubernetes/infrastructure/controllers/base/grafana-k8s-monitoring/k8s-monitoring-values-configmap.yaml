@@ -1,0 +1,109 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: k8s-monitoring-values
+  namespace: monitoring
+data:
+  values.yaml: |
+    #cluster:   # Cluster name is set inline of the HelmRelease to avoid hardcoding it in the values.yaml file, which is shared between clusters. 
+    #  name: home-dev-cl
+
+    global:
+      scrapeInterval: 120s
+      scrapeTimeout: 10s
+
+    # ── Destinations ────────────────────────────────────────────────────────────────
+    destinations:
+      hostedMetrics:
+        type: prometheus
+        url: https://prometheus-prod-39-prod-eu-north-0.grafana.net/api/prom/push
+        auth:
+          type: basic
+          usernameKey: metrics-username
+          passwordKey: metrics-password
+        secret:
+          create: false
+          name: grafana-cloud-credentials
+          namespace: monitoring
+          
+      hostedLogs:
+        type: loki
+        url: https://logs-prod-025.grafana.net/loki/api/v1/push
+        auth:
+          type: basic
+          usernameKey: logs-username
+          passwordKey: logs-password
+        secret:
+          create: false
+          name: grafana-cloud-credentials
+          namespace: monitoring
+        tenantIdFrom: env("LOKI_TENANT_ID")
+
+    # ── Collectors ──────────────────────────────────────────────────────────────────
+
+    collectors:
+      alloy:
+        enabled: true
+        presets: [statefulset, clustered]
+
+    # Collector common affects all collectors
+    collectorCommon:
+      # Apply settings for all Alloy collectors
+      # @section -- Collectors
+      alloy: {}
+
+    # ── Features ────────────────────────────────────────────────────────────────────
+
+    clusterMetrics:
+      enabled: true
+      destinations: []
+      collector: ""
+
+    clusterEvents:
+      enabled: true
+      destinations: []
+      collector: ""
+
+    podLogsViaLoki:
+      enabled: false
+
+    podLogsViaKubernetesApi:
+      enabled: true
+      destinations: [hostedLogs]
+      collector: ""
+
+    # Pods/services annotated with prometheus.io/scrape: "true" will be scraped.
+    annotationAutodiscovery:
+      enabled: true
+
+    # Talos: host-level features disabled — no access to node OS
+    hostMetrics:
+      enabled: false
+      destinations: []
+      collector: ""
+
+    nodeLogs:
+      enabled: false
+
+    costMetrics:
+      enabled: false
+    telemetryServices:
+      kepler:
+        deploy: false
+      opencost:
+        deploy: false
+      node-exporter:
+        deploy: false
+      windows-exporter:
+        deploy: false
+
+    #  Deployment/Pod/ReplicaSet state metrics
+    telemetryServices:
+      kube-state-metrics:
+        deploy: true
+
+    selfReporting:
+      enabled: true
+
+    alloy-operator:
+      deploy: true

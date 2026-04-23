@@ -10,5 +10,7 @@ resources:
   - ../base/kong
   - ../base/csi-driver-nfs
   - ../base/cloudnative-pg
+  - ../base/grafana-k8s-monitoring
 
-  
+patches:
+  - path: patch-k8s-monitoring-helmrelease.yaml

@@ -1,0 +1,9 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: k8s-monitoring
+  namespace: monitoring
+spec:
+  values:
+    cluster:
+      name: home-prod-cl   # Cluster name is patched in kustomize overalay for each cluster

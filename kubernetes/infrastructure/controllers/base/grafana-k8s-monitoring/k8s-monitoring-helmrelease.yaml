@@ -1,0 +1,44 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: k8s-monitoring
+  namespace: monitoring
+spec:
+  chart:
+    spec: 
+      chart: k8s-monitoring
+      version: "~4.0.2"
+      sourceRef:
+        kind: HelmRepository
+        name: grafana
+        namespace: monitoring
+      reconcileStrategy: ChartVersion
+  suspend: false
+
+  valuesFrom:
+    - kind: ConfigMap
+      name: k8s-monitoring-values
+      valuesKey: values.yaml # Values common to all clusters are stored in this ConfigMap, and cluster-specific values are set inline in the HelmRelease.
+
+  releaseName: k8s-monitoring
+  
+  interval: 6h0m0s
+  # timeout: 10m0s
+
+  values:
+    cluster:
+      name: <your-cluster-name>   # Cluster name is patched in kustomize overalay for each cluster
+
+  install:
+    createNamespace: true
+    crds: CreateReplace
+    remediation:
+      retries: 2
+      remediateLastFailure: true
+
+  upgrade:
+    crds: CreateReplace   # Ensure CRDs are upgraded/replaced when upgrading the release
+    remediation:
+      retries: 2
+      remediateLastFailure: true
