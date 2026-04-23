@@ -41,14 +41,15 @@ Core components that make the cluster run and provide the services needed to dep
 | Logo | Name | Description |  
 |------|------|-------------| 
 | <img src="https://www.talos.dev/favicon.svg" width="28"/> | [Talos](https://talos.dev) | Immutable, secure-by-default Kubernetes operating system. |
-| <img src="https://raw.githubusercontent.com/flannel-io/flannel/master/logos/flannel-glyph-color.svg" width="20"/> | [Flannel](https://github.com/flannel-io/flannel) | CNI plugin |
+| <img src="https://raw.githubusercontent.com/flannel-io/flannel/master/logos/flannel-glyph-color.svg" width="20"/> | [Flannel](https://github.com/flannel-io/flannel) | CNI plugin providing pod networking across the cluster. |
 | <img src="https://fluxcd.io/favicons/favicon.ico" width="32"/> | [FluxCD](https://fluxcd.io/) | GitOps operator keeping cluster state in sync with the repo. |  
 | <img src="https://cert-manager.io/images/cert-manager-logo-icon.svg" width="32"/> | [cert-manager](https://cert-manager.io/) | Automated TLS certificate management with Let’s Encrypt (via Cloudflare). |  
 | <img src="https://external-secrets.io/latest/pictures/eso-round-logo.svg" width="32"/> | [External Secrets Operator](https://external-secrets.io/) | Integrates Kubernetes with external secret stores (Azure Key Vault in this setup). |  
 | <img src="https://getsops.io/favicons/favicon.ico" width="32"/> | [SOPS](https://getsops.io/) | Encrypts and manages secrets and sensitive configuration data stored in Git. |
 | <img src="https://kong.github.io/icons/favicon.ico" width="28"/> | [Kong Gateway](https://konghq.com/) | API Gateway configured via Gateway API resources using [Kong Ingress Controller](https://konghq.com/products/kong-ingress-controller).|  
 | <img src="https://raw.githubusercontent.com/metallb/metallb/main/website/static/images/logo/metallb-blue.svg" width="28"/> | [MetalLB](https://metallb.universe.tf/) | LoadBalancer implementation for bare-metal Kubernetes clusters. |
-
+| <img src="https://cloudnative-pg.io/images/hero_image.svg" width="28"/> | [CloudNativePG](https://cloudnative-pg.io/) | PostgreSQL operator manages database cluster lifecycle and automates backups to Azure Blob Storage via [Barman Cloud](https://cloudnative-pg.io/plugin-barman-cloud/). |
+| <img src="https://raw.githubusercontent.com/grafana/grafana/main/public/img/grafana_icon.svg" width="28"/> | [Grafana K8s Monitoring](https://github.com/grafana/k8s-monitoring-helm) | Helm chart (v4) deploying Grafana Alloy via the Alloy Operator to collect cluster metrics, logs, and traces — forwarded to [Grafana Cloud](https://grafana.com/products/cloud) |
 <!--| <img src="https://k3s.io/img/favicon.ico" width="28"/> | [K3s](https://k3s.io/) | Lightweight Kubernetes distribution. | -->
 
 ### Applications
@@ -60,7 +61,7 @@ Core services and experimental workloads deployed in the cluster.
 | **[Homepage](https://gethomepage.dev/)**     | Unified dashboard for services and bookmarks.    |
 | **[Jellyfin](https://jellyfin.org/)**        | Media system and streaming server.                           |
 | **[Omada Software Controller](https://www.omadanetworks.com/en/business-networking/omada/controller/)** | Software controller for TP-Link SDN.                    |
-| **[SignalK](https://signalk.org/)**          | Open marine data platform. |
+| **[SignalK](https://signalk.org/)**          | Open-source marine data platform for aggregating boat sensor data.  |
 
 ### 💻 Infrastructure
 The homelab runs on a small, efficient setup suitable for a single-node cluster. Current configuration:
@@ -76,11 +77,10 @@ The homelab runs on a small, efficient setup suitable for a single-node cluster.
 
 This environment is a work in progress. Below are areas for potential future improvement.
 
-| Area | Idea / Improvement | Status |
-| :--- | :--- | :--- |
-| **Disaster Recovery** | Implement automated backups (e.g., Velero) for cluster state and PVs. | Planned |
-| **Security** | Implement network policies to restrict pod-to-pod traffic (requires replacing Flannel). | Planned |
-| **Observability** | Deploy monitoring and alerting (e.g. Prometheus, Grafana). | Planned |
+| Area | Idea / Improvement
+| :--- | :--- |
+| **Disaster Recovery** | Implement Velero for cluster state and PVs |
+| **Security** | Implement network policies to restrict pod-to-pod traffic (requires replacing Flannel). |
 
 ## 📂 Directory Structure
 
