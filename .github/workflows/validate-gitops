@@ -1,0 +1,58 @@
+# This is a basic workflow to help you get started with Actions
+
+name: GitOps Validation CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but not for the "main" branch
+  push:
+    branches-ignore: [ "main" ]
+  pull_request:
+    branches: [ "main","dev" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  validate-clusters:
+    # Runs the job only if the condition is true. In this case, it will run if the branch is not "main"
+    if: github.ref != 'refs/heads/main'
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    env:
+      FLUX_CLUSTER_DIR: ./kubernetes/clusters
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Flux CLI
+        uses: fluxcd/flux2/action@main
+        with:
+          version: 'latest'
+      
+      - name: Check Flux CLI version
+        run: flux --version
+
+      - name: Validate all Flux Kustomization files
+        run: |
+          set -e # Fail immediately if any command fails
+          for ks_file in ${FLUX_CLUSTER_DIR}/*/*.yaml; do
+            if [[ $(yq .kind $ks_file) == "Kustomization" ]]; then
+              ks_name=$(yq .metadata.name $ks_file)
+              ks_path=$(yq .spec.path $ks_file)
+              
+              echo "::group::Validating $ks_file in cluster overlay $(dirname $ks_path | xargs basename ) with Kustomization name $ks_name"
+              flux build kustomization $ks_name \
+                --path $ks_path \
+                --kustomization-file $ks_file \
+                --dry-run
+              echo "::endgroup::"
+            else
+              echo "::group::Skipping $ks_file as it is not a Kustomization file."  
+              echo "::endgroup::"
+            fi
+          done
