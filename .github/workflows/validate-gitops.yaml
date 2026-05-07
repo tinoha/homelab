@@ -1,5 +1,3 @@
-# This is a basic workflow to help you get started with Actions
-
 name: GitOps Validation CI
 
 # Controls when the workflow will run
@@ -15,7 +13,20 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
+  # This job will run a security scan using Gitleaks to detect any secrets in the codebase.
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # This job will validate the Flux Kustomization files in the clusters directory.
   validate-clusters:
     # Runs the job only if the condition is true. In this case, it will run if the branch is not "main"
     if: github.ref != 'refs/heads/main'
@@ -49,7 +60,7 @@ jobs:
               flux build kustomization $ks_name \
                 --path $ks_path \
                 --kustomization-file $ks_file \
-                --dry-run
+                --dry-run > /dev/null
               echo "::endgroup::"
             else
               echo "::group::Skipping $ks_file as it is not a Kustomization file."  
