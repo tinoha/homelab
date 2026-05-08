@@ -1,8 +1,11 @@
-name: GitOps Validation CI
+name: GitOps Validation CI 
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but not for the "main" branch
+  # The workflow will run for pull requests targeting the main or dev branches, and for pushes to any branch except main.
+  # Main branch is protected, so direct pushes are not allowed. All changes must go through a pull request.
+  # Dev branch is the development branch where all feature branches are merged. Direct pushes are allowed as this is a homelab environment only. 
+
   push:
     branches-ignore: [ "main" ]
   pull_request:
@@ -13,9 +16,12 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This job will run a security scan using Gitleaks to detect any secrets in the codebase.
-  security-scan:
+  security-scan: # run a security scan using Gitleaks to detect any secrets in the codebase.
     runs-on: ubuntu-latest
+    permissions:
+      contents: read      # Required to checkout the code
+      pull-requests: read  # Required for Gitleaks to scan PR commits
+      statuses: write      # Required if the action updates the PR status check
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -26,17 +32,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  # This job will validate the Flux Kustomization files in the clusters directory.
-  validate-clusters:
-    # Runs the job only if the condition is true. In this case, it will run if the branch is not "main"
-    if: github.ref != 'refs/heads/main'
-    # The type of runner that the job will run on
+  validate-manifests: # Validate the Flux Kustomization files in the clusters directory.
+    # if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
     env:
       FLUX_CLUSTER_DIR: ./kubernetes/clusters
 
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # Checks-out your repository under $GITHUB_WORKSPACE
       - name: Checkout repository
         uses: actions/checkout@v6
 
@@ -48,15 +51,14 @@ jobs:
       - name: Check Flux CLI version
         run: flux --version
 
-      - name: Validate all Flux Kustomization files
+      - name: Validate Flux Kustomization files
         run: |
           set -e # Fail immediately if any command fails
           for ks_file in ${FLUX_CLUSTER_DIR}/*/*.yaml; do
             if [[ $(yq .kind $ks_file) == "Kustomization" ]]; then
               ks_name=$(yq .metadata.name $ks_file)
-              ks_path=$(yq .spec.path $ks_file)
-              
-              echo "::group::Validating $ks_file in cluster overlay $(dirname $ks_path | xargs basename ) with Kustomization name $ks_name"
+              ks_path=$(yq .spec.path $ks_file)              
+              echo "::group::Validating [$ks_file] in cluster $(dirname $ks_file | xargs basename ) with Kustomization name $ks_name"
               flux build kustomization $ks_name \
                 --path $ks_path \
                 --kustomization-file $ks_file \
