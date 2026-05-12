@@ -18,14 +18,6 @@ machine:
 
 # Provides cluster specific configuration options.
 cluster:
-  # API server specific configuration options.
-  apiServer:
-    admissionControl:
-      - name: PodSecurity
-        configuration:
-          defaults:
-            enforce: privileged   # previously "baseline", now "privileged" to allow running workloads with elevated privileges.
-
   # Allows running workload on control-plane nodes.
   allowSchedulingOnControlPlanes: true
 

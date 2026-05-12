@@ -21,23 +21,10 @@ machine:
 cluster:
   # Allows running workload on control-plane nodes.
   allowSchedulingOnControlPlanes: true
-  apiServer:
-    admissionControl:
-      - name: PodSecurity
-        configuration:
-          defaults:
-            enforce: privileged   # previously "baseline", now "privileged" to allow running workloads with elevated privileges.
-
-  #   # Remove the PodSecurity admission controller to disable Pod Security Standards enforcement temporarily.
-  #   admissionControl:
-  #     - name: PodSecurity # Name is the name of the admission controller.
-  #       $patch: delete # Remove this line to enable admission controllers
-
 
 ---
 ## Configure networking for the node.
-# Configure hostname
----  
+# Configure hostname  
 apiVersion: v1alpha1
 kind: HostnameConfig
 hostname: talos-prod-1
