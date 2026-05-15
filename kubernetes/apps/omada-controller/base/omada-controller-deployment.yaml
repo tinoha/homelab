@@ -17,26 +17,48 @@ spec:
       labels:
         app: omada-controller
     spec:
+      securityContext:
+        runAsUser: 550
+        runAsGroup: 550
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+
       initContainers:
         - name: init-data
           image: docker.io/tihal/omada-controller
           command: # Initialize omada-data volume only if it's empty and no init-data.lock exists.
-            - "sh"
-            - "-exc"
+            - "/bin/bash"
+            - "-euc"
             - |
-              if [ ! -f /data/init-data.lock -a -z "$(find /data -mindepth 1 -print -quit)" ]; then
-                echo "Initializing omada data directory..." &&
-                chown -c omada:omada /data /logs &&
-                cp -rp /opt/tplink/EAPController/data/. /data &&
+              if [[ ! -f /data/init-data.lock ]] && [[ -z "$(find /data -mindepth 1 -print -quit)" ]]; then
+                echo "Initializing data directory..."
+                chown -c omada:omada /data /logs
+                chmod 0755 /data /logs
+                cp -rp /opt/tplink/EAPController/data/. /data
                 touch /data/init-data.lock
+                echo "Omada data directory initialized successfully."
+              else
+                echo "Existing data detected in /data or init-data.lock exists, skipping initialization."
               fi
           securityContext:
             runAsUser: 0
+            runAsNonRoot: false
+            privileged: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+              add: 
+              - "CHOWN"  # Required for chown command to set correct ownership of the data and logs directories.
+              - "DAC_OVERRIDE" # Required for accessing files in /data and /logs that may have restrictive permissions during initialization.
+              - "FOWNER" # Required for copying files to /data preserving file ownership and permissions.
           volumeMounts:
             - name: omada-logs
               mountPath: /logs
             - name: omada-data
               mountPath: /data
+      
       containers:
         - name: omada-controller
           image: docker.io/tihal/omada-controller
@@ -63,10 +85,11 @@ spec:
             - containerPort: 29813
             - containerPort: 29814
             - containerPort: 29815
+            - containerPort: 29816
             - containerPort: 29817
           securityContext:
-            runAsUser: 550
-            runAsGroup: 550
+            privileged: false
+            allowPrivilegeEscalation: true  # Needed for running tpeap command as root inside the container via sudo.
       terminationGracePeriodSeconds: 300
       volumes:
         - name: omada-logs
