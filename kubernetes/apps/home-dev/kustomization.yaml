@@ -21,7 +21,7 @@ images:
   - name: docker.io/signalk/signalk-server
     newTag: latest
 
-transformers:
-  - transformers/pvc-labeler-transformer.yaml # Add label to all pvcs to let pvc-update-transformer.yaml select them
-  - transformers/pvc-update-transformer.yaml # Remove volumename and/or storage class from PVCs
+# transformers:
+#   - transformers/pvc-labeler-transformer.yaml # Add label to all pvcs to let pvc-update-transformer.yaml select them
+#   - transformers/pvc-update-transformer.yaml # Remove volumename and/or storage class from PVCs
 

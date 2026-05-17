@@ -11,5 +11,5 @@ spec:
   resources:
     requests:
       storage: 2Gi
-  volumeName: signalk
+#  volumeName: signalk
   storageClassName: local-path
