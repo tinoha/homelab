@@ -12,7 +12,7 @@ spec:
   resources:
     requests:
       storage: 4Gi # Check official Omada docs and adjust acordingly
-  volumeName: omada-logs
+#  volumeName: omada-logs
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -28,4 +28,4 @@ spec:
   resources:
     requests:
       storage: 8Gi # Check official Omada docs and adjust acordingly
-  volumeName: omada-data
+#  volumeName: omada-data

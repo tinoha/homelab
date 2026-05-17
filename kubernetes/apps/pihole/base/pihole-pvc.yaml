@@ -10,4 +10,4 @@ spec:
   resources:
     requests:
       storage: 5Gi
-  volumeName: pihole-etc-pv
+#  volumeName: pihole-etc-pv
