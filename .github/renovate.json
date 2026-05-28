@@ -1,0 +1,48 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+
+  "extends": [
+    "config:recommended",
+    ":configMigration"
+  ],
+
+  "baseBranchPatterns": ["dev"],
+
+  "timezone": "Europe/Helsinki",
+  "schedule": ["* * * * 1"],
+
+  "prConcurrentLimit": 2,
+
+  "packageRules": [
+    {
+      "description": "Group infrastructure updates",
+      "matchFileNames": [
+        "kubernetes/infrastructure/base/**",
+        "kubernetes/infrastructure/controllers/**",
+        "kubernetes/infrastructure/configs/**"
+      ],
+      "groupName": "Infrastructure updates",
+      "labels": ["infrastructure"],
+      "prPriority": 5
+    },
+    {
+      "description": "Group application container image updates",
+      "matchFileNames": ["kubernetes/apps/**"],
+      "matchDatasources": ["docker"],
+      "groupName": "Application updates",
+      "labels": ["apps"],
+      "prPriority": 1
+    },
+    {
+      "description": "Keep major version updates separate",
+      "matchUpdateTypes": ["major"],
+      "groupName": null,
+      "labels": ["major-update"]
+    }
+  ],
+
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    "assignees": ["@tinoha"]
+  }
+}
