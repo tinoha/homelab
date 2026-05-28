@@ -9,7 +9,7 @@
   "baseBranchPatterns": ["dev"],
 
   "timezone": "Europe/Helsinki",
-  "schedule": ["* * * * 1"],
+  "schedule": ["* 0-6 * * 1"],
 
   "prConcurrentLimit": 2,
 
@@ -26,12 +26,18 @@
       "prPriority": 5
     },
     {
-      "description": "Group application container image updates",
+      "description": "Group application updates",
       "matchFileNames": ["kubernetes/apps/**"],
-      "matchDatasources": ["docker"],
       "groupName": "Application updates",
       "labels": ["apps"],
       "prPriority": 1
+    },
+    {
+      "description": "Group GitHub Actions workflow updates",
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions updates",
+      "labels": ["github-actions"],
+      "prPriority": 2
     },
     {
       "description": "Keep major version updates separate",
@@ -39,10 +45,5 @@
       "groupName": null,
       "labels": ["major-update"]
     }
-  ],
-
-  "vulnerabilityAlerts": {
-    "labels": ["security"],
-    "assignees": ["@tinoha"]
-  }
+  ]
 }
