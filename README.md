@@ -35,16 +35,16 @@ The design philosophy and goals for this homelab.
 
 This homelab is built on two main layers: **platform components** that provide the foundation, and **applications** that run on top of it.
 
-### Kubernetes Platform
+### Kubernetes Platform Components
 Core components that make the cluster run and provide the services needed to deploy and manage applications.
 
-| Logo | Name | Description |  
+| Logo | Name | Capability / Role in this homelab |
 |------|------|-------------| 
 | <img src="https://www.talos.dev/favicon.svg" width="28"/> | [Talos](https://talos.dev) | Immutable, secure-by-default Kubernetes operating system. |
-| <img src="https://raw.githubusercontent.com/flannel-io/flannel/master/logos/flannel-glyph-color.svg" width="20"/> | [Flannel](https://github.com/flannel-io/flannel) | CNI plugin providing pod networking across the cluster. |
-| <img src="https://fluxcd.io/favicons/favicon.ico" width="32"/> | [FluxCD](https://fluxcd.io/) | GitOps operator keeping cluster state in sync with the repo. |  
-| <img src="https://cert-manager.io/images/cert-manager-logo-icon.svg" width="32"/> | [cert-manager](https://cert-manager.io/) | Automated TLS certificate management with Let’s Encrypt (via Cloudflare). |  
-| <img src="https://external-secrets.io/latest/pictures/eso-round-logo.svg" width="32"/> | [External Secrets Operator](https://external-secrets.io/) | Integrates Kubernetes with external secret stores (Azure Key Vault in this setup). |  
+| <img src="https://raw.githubusercontent.com/flannel-io/flannel/master/logos/flannel-glyph-color.svg" width="20"/> | [Flannel](https://github.com/flannel-io/flannel) | CNI plugin providing basic pod networking across the cluster. |
+| <img src="https://fluxcd.io/favicons/favicon.ico" width="32"/> | [FluxCD](https://fluxcd.io/) | GitOps controller that reconciles the desired cluster state from this repository. |  
+| <img src="https://cert-manager.io/images/cert-manager-logo-icon.svg" width="32"/> | [cert-manager](https://cert-manager.io/) | Automates TLS certificate issuance and renewal, including Let’s Encrypt certificates via Cloudflare DNS validation.|  
+| <img src="https://external-secrets.io/latest/pictures/eso-round-logo.svg" width="32"/> | [External Secrets Operator](https://external-secrets.io/) | Synchronizes selected secrets from Azure Key Vault into Kubernetes Secrets. |
 | <img src="https://getsops.io/favicons/favicon.ico" width="32"/> | [SOPS](https://getsops.io/) | Encrypts and manages secrets and sensitive configuration data stored in Git. |
 | <img src="https://kong.github.io/icons/favicon.ico" width="28"/> | [Kong Gateway](https://konghq.com/) | API Gateway configured via Gateway API resources using [Kong Ingress Controller](https://konghq.com/products/kong-ingress-controller).|  
 | <img src="https://raw.githubusercontent.com/metallb/metallb/main/website/static/images/logo/metallb-blue.svg" width="28"/> | [MetalLB](https://metallb.universe.tf/) | LoadBalancer implementation for bare-metal Kubernetes clusters. |
@@ -62,6 +62,16 @@ Core services and experimental workloads deployed in the cluster.
 | **[Jellyfin](https://jellyfin.org/)**        | Media system and streaming server.                           |
 | **[Omada Software Controller](https://www.omadanetworks.com/en/business-networking/omada/controller/)** | Software controller for TP-Link SDN.                    |
 | **[SignalK](https://signalk.org/)**          | Open-source marine data platform for aggregating boat sensor data.  |
+
+### Repository Automation and Validation 
+Automation and validation tools used outside the cluster to keep the repository safer, more reliable, and up to date.
+
+| Tool | Role in this homelab |
+|---|---|
+| [GitHub Actions](https://github.com/features/actions) | Runs repository validation workflows such as GitOps checks and secret scanning. |
+| [Gitleaks](https://gitleaks.io/) | Scans the repository for accidentally committed secrets. |
+| [Renovate](https://docs.renovatebot.com/) | Monitors dependencies and container image versions, then creates pull requests for updates. |
+| [git-filter-repo](https://github.com/newren/git-filter-repo) | Used to sanitize the repository before pushing it to public mirror. |
 
 ### 💻 Infrastructure
 The homelab runs on a small, efficient setup suitable for a single-node cluster. Current configuration:
