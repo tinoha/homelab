@@ -18,7 +18,7 @@ jobs:
       # SSH_KEY: ${{ secrets.SSH_KEY }}          # SSH key secret
     steps:
       - name: Checkout full repository (no depth)
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: main        # checkout main branch only
           fetch-depth: 0   # get full history for filtering
