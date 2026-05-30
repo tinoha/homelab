@@ -13,6 +13,13 @@
 
   "prConcurrentLimit": 2,
 
+  "flux": {
+    "managerFilePatterns": [
+      "kubernetes/infrastructure/controllers/**/*.{yaml,yml}",
+      "kubernetes/apps/**/*.{yaml,yml}"
+    ]
+  },
+  
   "packageRules": [
     {
       "description": "Group infrastructure updates",
@@ -22,28 +29,28 @@
         "kubernetes/infrastructure/configs/**"
       ],
       "groupName": "Infrastructure updates",
-      "labels": ["infrastructure"],
+      "addLabels": ["infrastructure"],
       "prPriority": 5
     },
     {
       "description": "Group application updates",
       "matchFileNames": ["kubernetes/apps/**"],
       "groupName": "Application updates",
-      "labels": ["apps"],
+      "addLabels": ["apps"],
       "prPriority": 1
     },
     {
       "description": "Group GitHub Actions workflow updates",
       "matchManagers": ["github-actions"],
       "groupName": "GitHub Actions updates",
-      "labels": ["github-actions"],
+      "addLabels": ["github-actions"],
       "prPriority": 2
     },
     {
       "description": "Keep major version updates separate",
       "matchUpdateTypes": ["major"],
       "groupName": null,
-      "labels": ["major-update"]
+      "addLabels": ["major-update"]
     }
   ]
 }
