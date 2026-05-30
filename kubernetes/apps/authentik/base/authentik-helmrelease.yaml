@@ -18,7 +18,7 @@ spec:
         kind: HelmRepository
         name: authentik
         namespace: flux-system
-  # timeout: 10m0s
+  timeout: 10m0s
   
   valuesFrom:
     - kind: ConfigMap
