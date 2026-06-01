@@ -11,7 +11,7 @@
   "timezone": "Europe/Helsinki",
   "schedule": ["* 0-6 * * 1"],
 
-  "prConcurrentLimit": 2,
+  "prConcurrentLimit": 3,
 
   "flux": {
     "managerFilePatterns": [
@@ -30,14 +30,14 @@
       ],
       "groupName": "Infrastructure updates",
       "addLabels": ["infrastructure"],
-      "prPriority": 5
+      "prPriority": 10
     },
     {
       "description": "Group application updates",
       "matchFileNames": ["kubernetes/apps/**"],
       "groupName": "Application updates",
       "addLabels": ["apps"],
-      "prPriority": 1
+      "prPriority": 15
     },
     {
       "description": "Group GitHub Actions workflow updates",
@@ -46,11 +46,21 @@
       "addLabels": ["github-actions"],
       "prPriority": 2
     },
+
     {
       "description": "Keep major version updates separate",
       "matchUpdateTypes": ["major"],
       "groupName": null,
       "addLabels": ["major-update"]
+    },
+
+    {
+      "description": "Keep External Secrets Operator minor updates separate",
+      "matchPackageNames": ["external-secrets"],
+      "matchUpdateTypes": ["minor"],
+      "groupName": null,
+      "addLabels": ["minor-update"],
+      "prPriority": 8
     }
   ]
 }
