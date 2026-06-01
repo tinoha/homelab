@@ -57,7 +57,7 @@
     {
       "description": "Keep External Secrets Operator minor updates separate",
       "matchPackageNames": ["external-secrets"],
-      "matchUpdateTypes": ["minor"],
+      // "matchUpdateTypes": ["minor"],
       "separateMultipleMinor": true,
       "groupName": null,
       "addLabels": ["minor-update"],
