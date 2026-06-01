@@ -13,7 +13,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  timeout: 15m
+  timeout: 20m
   wait: true
   decryption:
     provider: sops

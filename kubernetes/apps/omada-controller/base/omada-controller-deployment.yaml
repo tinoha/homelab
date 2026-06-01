@@ -61,7 +61,7 @@ spec:
       
       containers:
         - name: omada-controller
-          image: ghcr.io/tinoha/omada-controller:6.2.10.17-dev
+          image: ghcr.io/tinoha/omada-controller:6.2.10.17
           env:
             - name: TZ
               value: Etc/UTC

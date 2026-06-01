@@ -17,7 +17,7 @@ spec:
         kind: HelmRepository
         name: cloudnative-pg
         namespace: flux-system
-  # timeout: 10m0s
+  timeout: 10m0s
   
   values:
     replicaCount: 1

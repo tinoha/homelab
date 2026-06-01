@@ -13,12 +13,12 @@ spec:
     spec:
       chart: authentik
       reconcileStrategy: ChartVersion
-      version: "~2025.10" # Pin to a minor version for stability
+      version: "~2025.12.0" # Pin to a minor version for stability
       sourceRef:
         kind: HelmRepository
         name: authentik
         namespace: flux-system
-  # timeout: 10m0s
+  timeout: 15m0s
   
   valuesFrom:
     - kind: ConfigMap
@@ -34,6 +34,6 @@ spec:
 
   upgrade:
     remediation:
-      retries: 2
+      retries: 1
       remediateLastFailure: true
   
