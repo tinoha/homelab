@@ -16,7 +16,7 @@ spec:
       version: "v1.19.2"
   releaseName: cert-manager
   interval: 6h0m0s
-  # timeout: 10m0s
+  timeout: 10m0s
    
   values:
     crds:

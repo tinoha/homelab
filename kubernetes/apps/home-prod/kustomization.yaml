@@ -10,7 +10,7 @@ resources:
   - ../signalk/home-prod
 
 images:
-  - name: docker.io/tihal/omada-controller
+  - name: ghcr.io/tinoha/omada-controller
     newTag: "6.2.10.17"
   - name: docker.io/jellyfin/jellyfin
     newTag: "10.11"

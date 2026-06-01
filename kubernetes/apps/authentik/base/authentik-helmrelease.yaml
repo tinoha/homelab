@@ -18,7 +18,7 @@ spec:
         kind: HelmRepository
         name: authentik
         namespace: flux-system
-  timeout: 10m0s
+  timeout: 15m0s
   
   valuesFrom:
     - kind: ConfigMap
@@ -34,6 +34,6 @@ spec:
 
   upgrade:
     remediation:
-      retries: 2
+      retries: 1
       remediateLastFailure: true
   

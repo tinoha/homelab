@@ -22,7 +22,7 @@ spec:
   releaseName: csi-driver-nfs
   
   interval: 6h0m0s
-  # timeout: 10m0s
+  timeout: 10m0s
 
   install:
     createNamespace: true

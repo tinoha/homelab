@@ -12,6 +12,10 @@ data:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: "OnRootMismatch"
+
+       # -- Deployment strategy for all deployed Deployments
+      deploymentStrategy:
+        type: Recreate
       
       # Shared Environment Variables
       # These will apply to both Server and Worker automatically.
@@ -78,6 +82,20 @@ data:
         annotations:
           konghq.com/protocol: "https"
           konghq.com/verify: "false"
+      
+      ## Liveness, readiness and startup probes for authentik server
+      startupProbe:
+        # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded
+        failureThreshold: 80
+        # -- Number of seconds after the container has started before [probe] is initiated
+        initialDelaySeconds: 10
+        # -- How often (in seconds) to perform the [probe]
+        periodSeconds: 10
+        # -- Minimum consecutive successes for the [probe] to be considered successful after having failed
+        successThreshold: 1
+        # -- Number of seconds after which the [probe] times out
+        timeoutSeconds: 5
+  
 
     worker:
       # -- authentik worker container-level security context
