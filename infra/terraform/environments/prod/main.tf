@@ -21,6 +21,11 @@ locals {
     },
     var.custom_tags
   )
+
+  container_names = [
+    "dev-pg-backups",  # PostgreSQL backup buckets used by CNPG/Barman (dev)
+    "prod-pg-backups", # PostgreSQL backup buckets used by CNPG/Barman (prod)
+  ]
 }
 
 # All Azure resources use: <type>-<workload>-<env>-<component>
@@ -51,4 +56,5 @@ module "backup" {
 
   wait_for_rbac_delay_seconds = local.wait_for_rbac_delay_seconds
   tags                        = local.merged_tags
+  container_names             = local.container_names
 }

@@ -42,6 +42,15 @@ resource "azurerm_storage_account" "backup" {
   depends_on = [time_sleep.wait_for_rbac]
 }
 
+# Create the containers for the storage account
+resource "azurerm_storage_container" "backup" {
+  for_each = var.container_names
+
+  name                  = each.value
+  storage_account_id  = azurerm_storage_account.backup.id
+  container_access_type = "private"
+}
+
 # Create an Azure AD application and service principal for backup operations
 resource "azuread_application_registration" "backup" {
   display_name = var.app_name

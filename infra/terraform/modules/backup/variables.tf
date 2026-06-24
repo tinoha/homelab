@@ -19,6 +19,12 @@ variable "storage_account_name" {
   }
 }
 
+variable "container_names" {
+  description = "List of container names to be created"
+  type = set(string)
+  default = []
+}
+
 variable "app_name" {
   description = "Name of the Azure AD application for backup operations."
   type        = string
