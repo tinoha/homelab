@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Place this script in /usr/local/bin so terraform can acces local az client
+# You may replace podman with docker here if needed.
+
+CONTAINER_ENGINE=${CONTAINER_ENGINE:-podman}
+
+exec "$CONTAINER_ENGINE" run --rm -v azure-cli-config:/root/.azure  mcr.microsoft.com/azure-cli:latest az "$@"
+
