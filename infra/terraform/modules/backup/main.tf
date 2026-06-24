@@ -34,7 +34,10 @@ resource "azurerm_storage_account" "backup" {
   account_replication_type      = "LRS"
   public_network_access_enabled = true
   shared_access_key_enabled     = false
-
+  access_tier              = "Cool"
+  https_traffic_only_enabled = true
+  allow_nested_items_to_be_public = false
+  
   tags       = var.tags
   depends_on = [time_sleep.wait_for_rbac]
 }
