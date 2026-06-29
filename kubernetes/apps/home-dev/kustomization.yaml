@@ -15,7 +15,7 @@ images:
   - name: docker.io/jellyfin/jellyfin
     newTag: "10.11"
   - name: docker.io/pihole/pihole
-    newTag: "2026.05.0"
+    newTag: "2026.06.0"
   - name: ghcr.io/gethomepage/homepage
     newTag: latest  
   - name: docker.io/signalk/signalk-server

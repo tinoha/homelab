@@ -41,7 +41,7 @@ The bootstrap script requires several environment variables for GitHub integrati
 - Contents -> Access: Read and write
 - Metadata -> Access: Read-only
 
-`flux github ...` needs PAT token to commit the flux manifests to the repo and to set-up a ssh key for further connections. PAT token is not used once cluster is up and running (see option --token-auth=false) 
+`flux github ...` needs PAT token to commit the flux manifests to the repo and to set-up an SSH key for further connections. PAT token is not used once cluster is up and running (see option --token-auth=false) 
 
 Next, export variables in your shell, or edit directly into the script:
 
@@ -64,10 +64,10 @@ export AZURE_CLIENT_SECRET="your_azure_client_secret"     # Azure Client Secret 
 ```
 
 Note: Only Azure Vault ClientID and ClientSecret are injected at bootstrap. To access Azure Vault you also need 
-tenantId and vaultUrl. These variable are loaded later from the cluster-specific overlay (SOPS-encrypted) once external-secrets CRDs are available. These variables are located in file:
+tenantId and vaultUrl. These variables are loaded later from the cluster-specific overlay (SOPS-encrypted) once external-secrets CRDs are available. These variables are located in file:
 `./infrastructure/configs/home-prod/secrets/patch-azure-clustersecretstore.yaml`
 
-## Step 4: Bootrap the Cluster with flux
+## Step 4: Bootstrap the Cluster with flux
 Ensure your `kubectl config`  points to the correct Kubernetes cluster.
 ```bash
 kubectl config get-contexts
@@ -83,7 +83,7 @@ The script will:
 - Commit Flux manifests to the repository
 - Trigger an initial sync of the cluster with the repository
 
-## Verify Bootstap
+## Verify Bootstrap
 
 Here are some commands to check flux is running and resources are being deployed:
 ```bash

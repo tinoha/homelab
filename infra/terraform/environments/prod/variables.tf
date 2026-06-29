@@ -4,6 +4,23 @@ variable "location" {
   default     = "swedencentral"
 }
 
+variable "project" {
+  description = "Short identifier used in resource naming."
+  type        = string
+}
+
+variable "environment" {
+  description = "Environment name."
+  type        = string
+  default     = "prod"
+}
+
+variable "name_suffix" {
+  description = "Suffix appended to Azure resources, e.g. 01 to help make the resource names globally unique where needed. Default is no suffix"
+  type        = string
+  default     = ""
+}
+
 # WARNING:
 # Do NOT put real secrets here.
 # These values are ONLY placeholders used to pre-create Key Vault secret objects.
@@ -28,6 +45,12 @@ variable "secrets" {
     "grafana-cloud-metrics-username"   = "Placeholder value for Grafana Cloud metrics username"
     "pihole-webserver-api-password"    = "Placeholder value for Pi-hole web server API password"
   }
+}
+
+variable "load_secrets" {
+  description = "Load secrets and their placeholder values into the keyvault"
+  type        = bool
+  default     = false
 }
 
 variable "custom_tags" {

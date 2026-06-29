@@ -4,21 +4,21 @@ variable "location" {
   default     = "swedencentral"
 }
 
-variable "resource_group_name_prefix" {
-  description = "The name of the resource group to create."
+variable "project" {
+  description = "Project name used in resource name and tagging."
   type        = string
-  default     = "hlab-tfstate"
 }
 
-variable "storage_account_name" {
-  description = "The name of the storage account to create."
+variable "environment" {
+  description = "Environment name used in resource name and tagging."
   type        = string
-  default     = "hlabtfstate"
+  default     = "bootstrap"
+}
 
-  validation {
-    condition     = can(regex("^[a-z][a-z0-9]{2,23}$", var.storage_account_name))
-    error_message = "Prefix must start with a lowercase letter and contain only a-z and 0-9."
-  }
+variable "name_suffix" {
+  description = "Suffix appended to Azure resources, e.g. 01 to help make the resource names globally unique where needed. Default is no suffix"
+  type        = string
+  default     = ""
 }
 
 variable "tfstate_name" {

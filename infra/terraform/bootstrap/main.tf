@@ -4,21 +4,23 @@
 # This should be run only once before running any other Terraform configurations.
 
 locals {
-  resource_group_name = "rg-${var.resource_group_name_prefix}"
-
   # Wait seconds after creating role assignments before proceeding with creating resources that depend on those permissions. 
   # RBAC permissions in Azure can take some time to propagate, and without this delay, the subsequent resource creations might fail due to insufficient permissions.
-  wait_for_rbac_delay_seconds = 30
+  wait_for_rbac_delay_seconds = 45
 
-  # Set the params for this configuration. These are used for tagging and naming resources.
-  project     = "hlab"
-  environment = "bootstrap"
+  resource_group_name = "rg-${var.project}-tfstate"
+
+  storage_account_name = join("", compact([
+    var.project,
+    "tfstate",
+    var.name_suffix
+  ]))
 
   # Merge custom tags from variable with default tags below. if there are any overlapping keys, the values from `var.custom_tags` will take precedence.
   merged_tags = merge(
     {
-      "environment" = "${local.environment}"
-      "project"     = "${local.project}"
+      "project"     = "${var.project}"
+      "environment" = "${var.environment}"
       "managed-by"  = "terraform"
     },
     var.custom_tags
@@ -61,17 +63,23 @@ resource "azurerm_role_assignment" "tfstate_data" {
 }
 
 resource "azurerm_storage_account" "tfstate" {
-  name                          = var.storage_account_name
-  resource_group_name           = azurerm_resource_group.tfstate.name
-  location                      = azurerm_resource_group.tfstate.location
-  account_tier                  = "Standard"
-  account_replication_type      = "LRS"
-  public_network_access_enabled = true
-  shared_access_key_enabled     = false # Disable access keys based authentication to enforce the use of Azure AD based authentication.
+  name                            = local.storage_account_name
+  resource_group_name             = azurerm_resource_group.tfstate.name
+  location                        = azurerm_resource_group.tfstate.location
+  account_tier                    = "Standard"
+  account_replication_type        = "LRS"
+  public_network_access_enabled   = true
+  shared_access_key_enabled       = false # Disable access keys based authentication to enforce the use of Azure AD based authentication.
+  https_traffic_only_enabled      = true
+  allow_nested_items_to_be_public = false
 
   # Prevent accidental deletion of the storageaccount, which would cause the loss of the Terraform state used by all other Terraform configurations. 
   lifecycle {
     prevent_destroy = true
+    precondition {
+      condition     = can(regex("^[a-z][a-z0-9]{2,23}$", local.storage_account_name))
+      error_message = "Storage account name must start with a lowercase letter and contain only a-z and 0-9, with a total length of 3-24 characters."
+    }
   }
 
   # Wait delay before managing storage account
