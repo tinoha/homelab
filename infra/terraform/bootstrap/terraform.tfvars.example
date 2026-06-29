@@ -1,0 +1,7 @@
+# Variables are used for naming and tagging the resources
+# These can help to make namings globally unique where needed.
+
+# project     = "<your_project_name>"
+environment = "bootstrap"
+name_suffix = "" # example 01,02...
+

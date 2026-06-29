@@ -12,7 +12,7 @@ If you want to replicate or adapt this setup:
 curl -sL https://talos.dev/install | sh
 ```
 ## 2. Obtain Talos installation image
-Two image types and download methods explained on this chapter:
+Two image types and download methods explained in this chapter:
 - QCOW2 image — prebuilt image for virtual machines
 - ISO image — for initial boot on bare metal or virtual machines
 

@@ -40,6 +40,10 @@ resource "azurerm_storage_account" "backup" {
   
   tags       = var.tags
   depends_on = [time_sleep.wait_for_rbac]
+
+  lifecycle {
+    prevent_destroy = false  # No protection wanted.
+  }
 }
 
 # Create the containers for the storage account

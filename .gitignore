@@ -25,6 +25,9 @@ Thumbs.db
 .terraform/
 *.retry
 inventory.ini
+terraform.tfvars
+*.auto.tfvars
+backend.conf
 
 # Ignore logs
 logs/

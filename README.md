@@ -6,9 +6,11 @@
 ## 📘 Introduction
 
 This repository contains the configuration of my Kubernetes-based homelab.  
-The main purpose of this setup is to learn and practice modern cloud-native technologies and GitOps practices in a production-like environment while also running a few always on applications.
+The main purpose of this setup is to learn and practice modern cloud-native technologies and GitOps practices in a production-like environment while also running a few always-on applications.
 
-The cluster runs on a single-node [Talos](https://talos.dev/) installation and is fully managed in a GitOps style with [FluxCD](https://fluxcd.io/). All Kubernetes infrastructure and applications are defined declaratively in this repository, with Kustomize overlays for two environments: **Production** (home-prod) and **Development** (home-dev).
+The platform consists of a Kubernetes cluster running on a local single-node Talos installation together with supporting infrastructure managed in Azure. All infrastructure, platform components, and applications are defined declaratively in this repository and managed using Infrastructure as Code and GitOps practices.
+
+Kubernetes resources are reconciled by FluxCD, while cloud resources are provisioned separately using Terraform. The repository contains configurations for two environments: **Production** (`home-prod`) and **Development** (`home-dev`).
 
 **Please note:**
 - Sensitive values (IPs, domains, emails) are sanitized before publishing. See [Sanitization](#sanitization) chapter for details.
@@ -19,6 +21,7 @@ The cluster runs on a single-node [Talos](https://talos.dev/) installation and i
 The design philosophy and goals for this homelab.
 
 - **GitOps first**: Git is the single source of truth for both infrastructure and application configurations. FluxCD keeps the cluster state in sync with this repository.
+- **Infrastructure as Code**: Cloud infrastructure and platform dependencies are managed declaratively using Terraform.
 - **Modularity**: Separation between infrastructure, applications, and cluster definitions.
 - **Environment overlays**: Multiple environments (dev, prod) are handled with Kustomize overlays, avoiding duplication of base manifests.
 - **Secrets management**: No secrets in Git. Sensitive data is handled with SOPS and [External Secrets Operator](https://external-secrets.io/) (Azure Key Vault).
@@ -50,6 +53,7 @@ Core components that make the cluster run and provide the services needed to dep
 | <img src="https://raw.githubusercontent.com/metallb/metallb/main/website/static/images/logo/metallb-blue.svg" width="28"/> | [MetalLB](https://metallb.universe.tf/) | LoadBalancer implementation for bare-metal Kubernetes clusters. |
 | <img src="https://cloudnative-pg.io/images/hero_image.svg" width="28"/> | [CloudNativePG](https://cloudnative-pg.io/) | PostgreSQL operator manages database cluster lifecycle and automates backups to Azure Blob Storage via [Barman Cloud](https://cloudnative-pg.io/plugin-barman-cloud/). |
 | <img src="https://raw.githubusercontent.com/grafana/grafana/main/public/img/grafana_icon.svg" width="28"/> | [Grafana K8s Monitoring](https://github.com/grafana/k8s-monitoring-helm) | Helm chart (v4) deploying Grafana Alloy via the Alloy Operator to collect cluster metrics, logs, and traces — forwarded to [Grafana Cloud](https://grafana.com/products/cloud) |
+| <img src="https://registry.terraform.io/images/redesign/hashicorp-terraform-on-dark.svg" width="28"/> | [Terraform](https://terraform.io/) | Provisions and manages cloud infrastructure and platform dependencies. |
 <!--| <img src="https://k3s.io/img/favicon.ico" width="28"/> | [K3s](https://k3s.io/) | Lightweight Kubernetes distribution. | -->
 
 ### Applications
@@ -74,14 +78,21 @@ Automation and validation tools used outside the cluster to keep the repository 
 | [git-filter-repo](https://github.com/newren/git-filter-repo) | Used to sanitize the repository before pushing it to public mirror. |
 
 ### 💻 Infrastructure
-The homelab runs on a small, efficient setup suitable for a single-node cluster. Current configuration:
-| Component | Details 
-|-----------|------------------------
-| CPU       | Intel N100 (4 cores) 
-| Memory    | 16 GB 
-| Storage   | Samsung EVO 860 1TB SATA 
-| Hypervisor| Ubuntu 24.04 LTS
-| Guest OS  | [Talos](https://talos.dev)  
+The platform consists of a local single node Kubernetes cluster running on Talos Linux paired with cloud resources provisioned in Azure using Terraform.
+
+**Cloud Infrastructure Automation**:
+<img src="https://registry.terraform.io/images/redesign/hashicorp-terraform-on-dark.svg" width="26"/> **[Terraform](https://terraform.io/)** is used to declaratively provision external Azure resources (Storage Account, Key Vault, and Entra ID application registrations) required by cluster workloads.
+
+**Local Hardware Specifications**
+The cluster runs on a compact and power-efficient MiniPC: 
+
+| Component | Details                   |
+|-----------|------------------------|
+| CPU       | Intel N100 (4 cores) |
+| Memory    | 16 GB |
+| Storage   | Samsung EVO 860 1TB SATA | 
+| Hypervisor| Ubuntu 24.04 LTS |
+| Guest OS  | [Talos](https://talos.dev) |
 
 ## 🚀 Roadmap
 
@@ -96,7 +107,7 @@ This environment is a work in progress. Below are areas for potential future imp
 
 A quick overview of the main directories and their purpose:
 
-### Directories under `kubernetes/`
+### Directories under `kubernetes/` 
 | Directory         | Purpose |
 |------------------|---------|
 | `clusters/`       | Environment-specific overlays for `home-prod` and `home-dev`. |
@@ -108,6 +119,7 @@ A quick overview of the main directories and their purpose:
 | Directory      | Purpose |
 |----------------|-----------------------------------------------------  |
 | `talos/`       | Talos machine configurations for `home-prod` and `home-dev`. |
+| `terraform/` | Terraform configurations for Azure resources. |
 
 <a id="sanitization"></a>
 ## 🔒 Sanitization
@@ -125,18 +137,21 @@ Other than these sanitizations, everything reflects the real production environm
 <a id="deployment-notes"></a>
 ## 📦 Deployment Notes
 
-This repository is **environment-specific** and cannot be deployed as-is, but it can serve as a reference for building a homelab or GitOps-managed Kubernetes environment. Before using it as a base, review and customize the following components:
+This repository is **environment-specific** and cannot be deployed as-is, but it can serve as a reference for building a GitOps-managed Kubernetes environment. Before using it as a base, you will need to customize various components to match your own environment. 
 
-- Adjust static `PersistentVolume` definitions
-- Update application `PersistentVolumeClaim` storage class references
-- Provide your own [Azure Key Vault](https://azure.microsoft.com/en-us/services/key-vault/) and configure credentials
-- Provide a valid Cloudflare API token for certificate management
-- Generate and configure your own [SOPS](https://github.com/getsops/sops) age key
-- Configure or bypass the Authentik identity layer, which enforces authentication on various exposed services
-- Review and adapt secrets, domain names, IP addresses, and certificate configuration
+**Note:** The following list is not exhaustive and serves as a set of examples of the primary areas that require adjustment:
 
-For detailed steps on how **this specific environment** is provisioned and bootstrapped, see:
+- **Cloud Infrastructure**: Update Terraform variables and Azure resource naming.
+- **GitOps Bootstrap**: Provide a GitHub PAT for the initial FluxCD bootstrapping process.
+- **Cluster Networking**: Adjust MetalLB IP pools, service-specific static IPs, and your own DNS domain configuration.
+- **DNS & TLS**: This setup assumes DNS is hosted via Cloudflare; you will need a valid Cloudflare API token for automated certificate management.
+- **Storage Layout**: Update NFS server details, static PV paths, and Talos disk selectors.
+- **Secrets & Identity**: Configure SOPS age keys and the Authentik identity layer.
+- **Environment Overlays**: Review domain names, IPs, and secret mappings in the cluster-specific overlays.
+
+For detailed step-by-step instructions on how to handle these customizations, and deploy the environment, please refer to the specialized guides below:
 - [Talos Cluster Setup](./infra/talos/README.md) – how the underlying Talos-based Kubernetes cluster is built
+- [Azure Resources Setup](./infra/terraform/README.md) – how to provision Azure resources with Terraform
 - [FluxCD Bootstrap Guide](./kubernetes/bootstrap/README.md) – how GitOps deployment and reconciliation are initialized
 
 ## 📄 License
