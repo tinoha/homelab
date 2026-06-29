@@ -53,7 +53,6 @@ Core components that make the cluster run and provide the services needed to dep
 | <img src="https://raw.githubusercontent.com/metallb/metallb/main/website/static/images/logo/metallb-blue.svg" width="28"/> | [MetalLB](https://metallb.universe.tf/) | LoadBalancer implementation for bare-metal Kubernetes clusters. |
 | <img src="https://cloudnative-pg.io/images/hero_image.svg" width="28"/> | [CloudNativePG](https://cloudnative-pg.io/) | PostgreSQL operator manages database cluster lifecycle and automates backups to Azure Blob Storage via [Barman Cloud](https://cloudnative-pg.io/plugin-barman-cloud/). |
 | <img src="https://raw.githubusercontent.com/grafana/grafana/main/public/img/grafana_icon.svg" width="28"/> | [Grafana K8s Monitoring](https://github.com/grafana/k8s-monitoring-helm) | Helm chart (v4) deploying Grafana Alloy via the Alloy Operator to collect cluster metrics, logs, and traces — forwarded to [Grafana Cloud](https://grafana.com/products/cloud) |
-| <img src="https://registry.terraform.io/images/redesign/hashicorp-terraform-on-dark.svg" width="28"/> | [Terraform](https://terraform.io/) | Provisions and manages cloud infrastructure and platform dependencies. |
 <!--| <img src="https://k3s.io/img/favicon.ico" width="28"/> | [K3s](https://k3s.io/) | Lightweight Kubernetes distribution. | -->
 
 ### Applications
